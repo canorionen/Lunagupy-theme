@@ -39,169 +39,18 @@
 </aside>
 
 {% stylesheet %}
-  /* Force section container to be transparent */
-  .section-header-announcements,
-  [data-section-type="header-announcements"] {
+  /* Clear section-specific styles to allow base.css full control */
+  .section-header-announcements {
     background: transparent !important;
     border: none !important;
-  }
-
-  .announcement-bar {
-    /* Remove default border */
-    border-block-end: none !important;
-    
-    /* Force Sticky-like behavior via fixed */
-    position: fixed !important;
-    top: 10px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    z-index: 100002 !important; /* Extremely high to stay above header */
-    width: calc(100% - 32px) !important;
-    max-width: 1200px !important;
-    
-    /* Thinner design but enough for readability */
-    min-height: 32px !important;
-    padding: 6px 20px !important;
-    
-    /* Improved Brand Design - Punchier Orange */
-    background-color: rgba(223, 159, 119, 0.95) !important; 
-    backdrop-filter: blur(10px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
-    
-    /* Rounded corners */
-    border-radius: 100px !important;
-    
-    /* High contrast shadow */
-    box-shadow: 
-      0 4px 15px rgba(0, 0, 0, 0.15), 
-      inset 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
-    
-    /* Override color scheme */
-    --color-background: transparent !important;
-    
-    /* Smooth transitions */
-    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   
-  /* Readability Improvement - BOLD & UPPERCASE */
-  .announcement-bar,
-  .announcement-bar *,
-  .announcement-bar__text,
-  .announcement-bar__slide,
-  .announcement-bar p,
-  .announcement-bar a,
-  .announcement-bar span,
-  .announcement-bar div {
-    color: #ffffff !important;
-    font-size: 13px !important;
-    font-weight: 900 !important; /* Max bold for small text */
-    text-transform: uppercase !important; /* Force uppercase */
-    letter-spacing: 0.06em !important;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.3) !important;
-    line-height: normal !important;
-  }
-  
-  /* Link clarity */
-  .announcement-bar a {
-    text-decoration: underline !important;
-    text-underline-offset: 4px;
-    transition: opacity 0.2s;
-  }
-
-  .announcement-bar a:hover {
-    opacity: 0.8;
-  }
-  
-  /* Mobile adjustments */
-  @media screen and (max-width: 749px) {
-    .announcement-bar {
-      top: 8px;
-      width: calc(100% - 16px);
-      min-height: 30px;
-      padding: 4px 12px !important;
-    }
-    .announcement-bar__text {
-      font-size: 12px;
-    }
-  }
-
-  .announcement-bar__slider {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-    min-height: inherit;
-
-    @media screen and (max-width: 749px) {
-      grid-column: 1 / -1;
-    }
-  }
-
-  .announcement-bar__slides {
-    display: grid;
-    grid: [stack] auto / [stack] auto;
-    width: calc(100% - var(--button-size) * 2);
-    max-width: 680px;
-    margin-inline: auto;
-  }
-
-  .announcement-bar__slides > * {
-    grid-area: stack;
-  }
-
-  .announcement-bar__slide {
-    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-
-    &[aria-hidden='true'] {
-      opacity: 0;
-      visibility: hidden;
-    }
-  }
-
-  .announcement-bar__slider slideshow-arrows {
-    padding: 0;
-    mix-blend-mode: normal;
-  }
-
-  .announcement-bar__slider slideshow-arrows .slideshow-control {
-    color: #333 !important;
-  }
-
-  .announcement-bar__slider .slideshow-control {
-    display: flex;
-    padding: 0;
-    width: var(--button-size);
-    height: var(--button-size);
-    align-items: center;
-    justify-content: center;
-    opacity: 1;
-    animation: none;
-
-    @media screen and (min-width: 750px) {
-      --slideshow-control-offset: calc((var(--button-size) - var(--icon-size-xs)) / 2);
-
-      .section--page-width &.slideshow-control--previous {
-        transform: translateX(var(--slideshow-control-offset));
-      }
-    }
-  }
-
-  .announcement-bar__slider .slideshow-control .svg-wrapper {
-    width: var(--icon-size-xs);
-    height: var(--icon-size-xs);
-  }
-
-  .announcement-bar__slide {
-    place-content: center;
-  }
-
-  .announcement-bar__text:first-child {
-    margin: 0;
-  }
-
   .announcement-bar__link {
     position: absolute;
     inset: 0;
+    z-index: 2;
   }
 {% endstylesheet %}
 
