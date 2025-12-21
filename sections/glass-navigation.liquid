@@ -16,6 +16,7 @@
       "type": "text",
       "id": "whatsapp_number",
       "label": "WhatsApp Number",
+      "default": "905071520296",
       "info": "Enter your phone number (e.g., 905551234567)"
     },
     {
@@ -162,17 +163,23 @@
     .glass-nav-item:hover {
       color: #000;
       background-color: rgba(255, 255, 255, 0.6);
-      transform: translateY(-8px) scale(1.1); 
+      /* Removed the lifting/scaling effect as requested */
+      transform: none; 
       box-shadow: 
-        0 12px 20px -8px rgba(0, 0, 0, 0.15),
-        0 4px 8px -4px rgba(0, 0, 0, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.08),
         inset 0 1px 0 rgba(255,255,255,0.8);
     }
     
     .glass-nav-item:hover .glass-nav-icon {
-      /* Scale icon slightly on hover for extra juice */
-      transform: scale(1.05); 
+      /* Removed icon scaling */
+      transform: none; 
     }
+  }
+
+  /* Stabilize Focus State to prevent "Second Press" glitch */
+  .glass-nav-item:focus, .glass-nav-item:focus-visible {
+      outline: none;
+      transform: none; /* Ensure focus doesn't trigger transforms */
   }
 
   /* Creative "Liquid Press" Effect - Deep Inset (Göçme) */
