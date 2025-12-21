@@ -640,12 +640,18 @@
 
     /* Liquid Glass Variables */
     --liquid-glass-blur: {{ settings.liquid_glass_blur | default: 20 }}px;
-    --liquid-glass-opacity: {{ settings.liquid_glass_opacity | default: 50 | divided_by: 100.0 }};
+    --liquid-glass-opacity: {{ settings.liquid_glass_opacity | default: 70 | divided_by: 100.0 }};
     --liquid-glass-saturation: {{ settings.liquid_glass_saturation | default: 180 }}%;
-    --liquid-glass-bg: rgba(245, 245, 247, var(--liquid-glass-opacity));
-    --liquid-glass-border: 1px solid rgba(255, 255, 255, 0.4);
-    --liquid-glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    --liquid-glass-bg: rgba(255, 255, 255, var(--liquid-glass-opacity));
+    --liquid-glass-bg-light: rgba(255, 255, 255, 0.85);
+    --liquid-glass-border: 1px solid rgba(255, 255, 255, 0.6);
+    --liquid-glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
     --liquid-glass-backdrop: blur(var(--liquid-glass-blur)) saturate(var(--liquid-glass-saturation));
+    
+    /* Brand Color for Buttons */
+    --brand-primary-color: #f3be99;
+    --brand-primary-color-dark: #e5a577;
+    --brand-primary-color-rgb: 243, 190, 153;
   }
 {% endstyle %}
 
@@ -690,37 +696,40 @@
   }
   {% endif %}
   
-  /* Buttons */
+  /* Buttons - Using Brand Color instead of Black */
   {% if settings.liquid_glass_buttons %}
   .button--primary,
   .shopify-payment-button__button,
-  button[type="submit"].button {
-    background-color: rgba(0, 0, 0, 0.6) !important;
+  button[type="submit"].button,
+  .add-to-cart-button.button {
+    background-color: var(--brand-primary-color, #f3be99) !important;
     backdrop-filter: blur(10px) saturate(150%) !important;
     -webkit-backdrop-filter: blur(10px) saturate(150%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 4px 15px rgba(var(--brand-primary-color-rgb, 243, 190, 153), 0.35) !important;
     transition: all 0.3s ease !important;
+    color: #fff !important;
   }
   
   .button--primary:hover,
-  button[type="submit"].button:hover {
-    background-color: rgba(0, 0, 0, 0.75) !important;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+  button[type="submit"].button:hover,
+  .add-to-cart-button.button:hover {
+    background-color: var(--brand-primary-color-dark, #e5a577) !important;
+    box-shadow: 0 6px 20px rgba(var(--brand-primary-color-rgb, 243, 190, 153), 0.45) !important;
     transform: translateY(-1px);
   }
   
   .button--secondary {
-    background-color: rgba(255, 255, 255, 0.5) !important;
+    background-color: rgba(255, 255, 255, 0.7) !important;
     backdrop-filter: blur(10px) saturate(150%) !important;
     -webkit-backdrop-filter: blur(10px) saturate(150%) !important;
     border: 1px solid rgba(255, 255, 255, 0.6) !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
   }
   
   .button--secondary:hover {
-    background-color: rgba(255, 255, 255, 0.7) !important;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
   }
   {% endif %}
   
