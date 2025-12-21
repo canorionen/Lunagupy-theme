@@ -262,7 +262,7 @@
   /* Mobile adjustments - Above mobile nav bar */
   @media screen and (max-width: 749px) {
     .sticky-add-to-cart__bar {
-      bottom: 150px; /* Increased for mobile to avoid nav bar overlap */
+      bottom: 180px; /* Safe distance above nav bar */
       width: auto;
       max-width: calc(100% - 24px);
       padding: 8px 12px 8px 8px;
@@ -296,14 +296,13 @@
 
     .sticky-add-to-cart__button {
       height: 38px;
-      min-width: 38px;
-      padding: 0 14px;
+      min-width: 120px; /* Increased for better width */
+      padding: 0 20px;
       flex-shrink: 0;
     }
 
     .sticky-add-to-cart__price {
-      font-size: 0.82rem;
-      flex-shrink: 0;
+      display: none; /* Keep price hidden to save space for text */
     }
     
     /* Hide variant on mobile - ONLY for sticky bar */
@@ -311,16 +310,18 @@
       display: none;
     }
     
-    /* Hide button text on mobile - ONLY for sticky bar */
+    /* Show button text on mobile */
     .sticky-add-to-cart__button .add-to-cart-text__content {
-      display: none;
+      display: inline;
+      font-size: 0.85rem;
+      margin-left: 4px;
     }
   }
 
   /* Small mobile - compact mode */
-  @media screen and (max-width: 389px) {
+  @media screen and (max-width: 480px) {
     .sticky-add-to-cart__bar {
-      bottom: 80px;
+      bottom: 180px; /* Increased further to avoid any overlap */
       padding: 6px 10px 6px 6px;
       gap: 6px;
     }
@@ -337,19 +338,25 @@
     }
     
     .sticky-add-to-cart__price {
-      font-size: 0.75rem;
+      display: none;
     }
 
     .sticky-add-to-cart__button {
-      height: 34px;
-      min-width: 34px;
-      padding: 0 10px;
+      height: 36px;
+      min-width: 110px;
+      padding: 0 15px;
+    }
+    
+    .sticky-add-to-cart__button .add-to-cart-text__content {
+      display: inline;
+      font-size: 0.8rem;
     }
   }
 
   /* Very small screens - still show title */
   @media screen and (max-width: 340px) {
     .sticky-add-to-cart__bar {
+      bottom: 180px;
       padding: 5px 8px 5px 5px;
       gap: 5px;
     }
@@ -370,8 +377,13 @@
     
     .sticky-add-to-cart__button {
       height: 30px;
-      min-width: 30px;
-      padding: 0 8px;
+      min-width: 100px;
+      padding: 0 12px;
+    }
+    
+    .sticky-add-to-cart__button .add-to-cart-text__content {
+      display: inline;
+      font-size: 0.75rem;
     }
   }
 {% endstylesheet %}
