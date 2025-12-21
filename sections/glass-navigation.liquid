@@ -273,10 +273,10 @@
     backdrop-filter: blur(0px); /* Remove blur to make it clearer */
   }
 
-  /* Notifications Stack */
+  /* Notifications Stack - Above sticky add-to-cart bar */
   .glass-notifications-stack {
-    position: absolute;
-    bottom: 85px; /* Offset from nav */
+    position: fixed;
+    bottom: 180px; /* Above sticky bar and nav */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -284,7 +284,7 @@
     gap: 8px;
     align-items: center;
     pointer-events: none;
-    z-index: -1;
+    z-index: 100000; /* Above everything */
     width: max-content;
   }
 
@@ -524,6 +524,10 @@
     }
     .cart-progress-bg {
       inset: -3px;
+    }
+    /* Mobile notification position */
+    .glass-notifications-stack {
+      bottom: 160px; /* Adjust for mobile sticky bar */
     }
   }
 
