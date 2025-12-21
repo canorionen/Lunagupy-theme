@@ -136,7 +136,7 @@
   .sticky-add-to-cart__bar {
     position: fixed;
     /* Position above glass navigation bar */
-    bottom: 130px; /* Nav bar height + increased offset */
+    bottom: 170px; /* Increased to avoid nav bar overlap */
     left: 50%;
     opacity: 0;
     transform: translateX(-50%) translateY(calc(100% + 40px));
@@ -262,7 +262,7 @@
   /* Mobile adjustments - Above mobile nav bar */
   @media screen and (max-width: 749px) {
     .sticky-add-to-cart__bar {
-      bottom: 110px; /* Mobile nav bar height + increased offset */
+      bottom: 150px; /* Increased for mobile to avoid nav bar overlap */
       width: auto;
       max-width: calc(100% - 24px);
       padding: 8px 12px 8px 8px;
