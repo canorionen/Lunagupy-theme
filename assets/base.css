@@ -4109,6 +4109,8 @@ aside.announcement-bar.announcement-bar {
   background: transparent !important;
   padding: 0 !important;
   margin: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* Inner Header Pill - ALWAYS FLOATING and VISIBLE */
@@ -4120,14 +4122,37 @@ header-component.header {
   transform: translateX(-50%) !important;
   width: calc(100% - 30px) !important;
   max-width: 1300px !important;
-  background-color: rgba(255, 255, 255, 0.8) !important;
-  backdrop-filter: blur(20px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+
+  /* SINGLE ROUNDED RECTANGLE STYLE */
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  /* Slightly transparent white */
+  backdrop-filter: blur(12px) !important;
+  /* "En kenarında hafif blur" */
+  -webkit-backdrop-filter: blur(12px) !important;
+
   border-radius: 24px !important;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12) !important;
-  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  /* "Kenarları yuvarlak" */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+  /* "Gölgesi de olsun çok hafif" */
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  /* Soft edge definition */
+
   transition: all 0.3s ease !important;
   z-index: 999997 !important;
+  overflow: hidden !important;
+  /* Clips any inner sharp corners */
+}
+
+/* IMPORTANT: REMOVE INNER BACKGROUNDS/BORDERS to prevent "sharp rectangle inside" */
+header-component.header .header__row,
+header-component.header .header__columns,
+header-component.header .header-wrapper,
+header-component.header .header__row--top,
+header-component.header .header__row--bottom {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* Ensure content starts at top */
@@ -4203,3 +4228,5 @@ body {
     justify-content: center !important;
   }
 }
+
+4
