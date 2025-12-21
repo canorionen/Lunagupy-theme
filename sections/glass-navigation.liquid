@@ -384,6 +384,82 @@
     display: none;
   }
 
+  /* SEARCH WINDOW */
+  .glass-search-window {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px) scale(0.9);
+    width: 280px;
+    height: auto;
+    
+    background-color: rgba(245, 245, 247, 0.65);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    
+    z-index: -2;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transform-origin: bottom center;
+  }
+
+  .glass-search-window.open {
+    opacity: 1;
+    pointer-events: auto;
+    /* Rise up */
+    transform: translateX(-50%) translateY(-95px) scale(1);
+  }
+
+  .glass-search-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .glass-search-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+  
+  .glass-search-input:focus {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .glass-search-btn {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+  
+  .glass-search-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
   .glass-menu-window.open {
     opacity: 1;
     pointer-events: auto;
@@ -468,6 +544,25 @@
     {%- endif -%}
   </div>
 
+  <div class="glass-search-window" id="GlassSearchWindow">
+    <form action="{{ routes.search_url }}" method="get" role="search" class="glass-search-form">
+      <input
+        type="text"
+        name="q"
+        id="GlassSearchInput"
+        class="glass-search-input"
+        placeholder="Ara..."
+        autocomplete="off"
+      >
+      <button type="submit" class="glass-search-btn" aria-label="Ara">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </form>
+  </div>
+
   <nav class="glass-nav-container" id="GlassNavContainer">
     <div class="glass-nav-spotlight-layer"></div>
     
@@ -477,6 +572,16 @@
          <svg class="glass-nav-icon menu-icon-svg" viewBox="0 0 24 24" fill="currentColor">
             <!-- Simple Rounded Hamburger -->
             <path d="M4 6a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm0 6a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm0 6a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1z"></path>
+         </svg>
+      </div>
+    </div>
+
+    <!-- Search Button (Trigger) -->
+    <div class="glass-nav-item" id="glassSearchButton" role="button" aria-label="Ara">
+      <div class="glass-nav-item-inner">
+         <svg class="glass-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
          </svg>
       </div>
     </div>
@@ -679,33 +784,65 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 5. Menu Toggle Logic
+    // 5. Menu & Search Toggle Logic
     const menuButton = document.getElementById('glassMenuButton');
     const menuWindow = document.getElementById('GlassMenuWindow');
-    
+    const searchButton = document.getElementById('glassSearchButton');
+    const searchWindow = document.getElementById('GlassSearchWindow');
+    const searchInput = document.getElementById('GlassSearchInput');
+
+    function closeAllGlassWindows() {
+        if(menuWindow) menuWindow.classList.remove('open');
+        if(menuButton) menuButton.classList.remove('menu-active');
+        if(searchWindow) searchWindow.classList.remove('open');
+        if(searchButton) searchButton.classList.remove('active'); // Optional styling
+    }
+
     if (menuButton && menuWindow) {
         menuButton.addEventListener('click', (e) => {
             e.preventDefault();
-            const isOpen = menuWindow.classList.contains('open');
+            e.stopPropagation();
             
-            if (isOpen) {
-                // Close
-                menuWindow.classList.remove('open');
-                menuButton.classList.remove('menu-active');
-            } else {
-                // Open
+            const wasOpen = menuWindow.classList.contains('open');
+            closeAllGlassWindows(); // Close search if open
+            
+            if (!wasOpen) {
                 menuWindow.classList.add('open');
                 menuButton.classList.add('menu-active');
             }
         });
+    }
 
-        // Close menu if clicking outside
-        document.addEventListener('click', (e) => {
-            if (!menuButton.contains(e.target) && !menuWindow.contains(e.target) && menuWindow.classList.contains('open')) {
-                menuWindow.classList.remove('open');
-                menuButton.classList.remove('menu-active');
+    if (searchButton && searchWindow) {
+        searchButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const wasOpen = searchWindow.classList.contains('open');
+            closeAllGlassWindows(); // Close menu if open
+            
+            if (!wasOpen) {
+                searchWindow.classList.add('open');
+                searchButton.classList.add('active');
+                // Focus input after transition
+                setTimeout(() => {
+                    if(searchInput) searchInput.focus();
+                }, 100);
             }
         });
     }
+
+    // Close menu/search if clicking outside
+    document.addEventListener('click', (e) => {
+        const target = e.target;
+        
+        // Define boundaries
+        const isMenuClick = (menuButton && menuButton.contains(target)) || (menuWindow && menuWindow.contains(target));
+        const isSearchClick = (searchButton && searchButton.contains(target)) || (searchWindow && searchWindow.contains(target));
+        
+        if (!isMenuClick && !isSearchClick) {
+             closeAllGlassWindows();
+        }
+    });
 });
 </script>
