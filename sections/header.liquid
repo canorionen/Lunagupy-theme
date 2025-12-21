@@ -21,8 +21,11 @@
     assign transparent = 'always'
     assign transparent_color_scheme = section.settings.product_color_scheme
   elsif section.settings.enable_transparent_header_collection and template.name == 'collection'
-    assign transparent = 'always'
-    assign transparent_color_scheme = section.settings.collection_color_scheme
+    comment
+      The user requested to remove the transparent header on collection pages so content starts below the header.
+      assign transparent = 'always'
+      assign transparent_color_scheme = section.settings.collection_color_scheme
+    endcomment
   endif
 
   if section.settings.enable_sticky_header == 'always'
