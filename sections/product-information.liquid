@@ -313,7 +313,7 @@
       width: auto;
       max-width: calc(100% - 24px);
       padding: 8px 12px 8px 8px;
-      gap: 10px;
+      gap: 8px;
       border-radius: 9999px;
     }
 
@@ -322,26 +322,38 @@
     }
 
     .sticky-add-to-cart__image {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
+    }
+
+    .sticky-add-to-cart__info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .sticky-add-to-cart__title {
-      font-size: 0.85rem;
-      max-width: 120px;
+      font-size: 0.82rem;
+      max-width: 150px; /* Increased for better visibility */
+      display: block !important;
+      line-height: 1.2;
     }
 
     .sticky-add-to-cart__button {
-      height: 40px;
-      min-width: 40px;
-      padding: 0 16px;
+      height: 38px;
+      min-width: 38px;
+      padding: 0 14px;
+      flex-shrink: 0;
     }
 
     .sticky-add-to-cart__price {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
+      flex-shrink: 0;
     }
     
-    /* Hide variant on very small screens - ONLY for sticky bar */
+    /* Hide variant on mobile - ONLY for sticky bar */
     .sticky-add-to-cart__variant {
       display: none;
     }
@@ -357,43 +369,56 @@
     .sticky-add-to-cart__bar {
       bottom: 80px;
       padding: 6px 10px 6px 6px;
-      gap: 8px;
+      gap: 6px;
     }
     
     .sticky-add-to-cart__image {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
     }
 
     .sticky-add-to-cart__title {
-      font-size: 0.8rem;
-      max-width: 80px;
+      font-size: 0.75rem;
+      max-width: 100px;
+      display: block !important;
     }
     
     .sticky-add-to-cart__price {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
 
     .sticky-add-to-cart__button {
-      height: 36px;
-      min-width: 36px;
-      padding: 0 12px;
+      height: 34px;
+      min-width: 34px;
+      padding: 0 10px;
     }
+  }
 
-    /* For product with only default variant show title */
-    .sticky-add-to-cart__info[data-singleton='true'] .sticky-add-to-cart__title {
-      display: block;
+  /* Very small screens - still show title */
+  @media screen and (max-width: 340px) {
+    .sticky-add-to-cart__bar {
+      padding: 5px 8px 5px 5px;
+      gap: 5px;
     }
-
-    /* For single variant show title and variant, truncate both */
-    .sticky-add-to-cart__info[data-single-option='true'] .sticky-add-to-cart__title {
-      display: block;
+    
+    .sticky-add-to-cart__image {
+      width: 30px;
+      height: 30px;
     }
-    .sticky-add-to-cart__info[data-single-option='true'] .sticky-add-to-cart__variant {
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    
+    .sticky-add-to-cart__title {
+      font-size: 0.7rem;
+      max-width: 70px;
+    }
+    
+    .sticky-add-to-cart__price {
+      font-size: 0.7rem;
+    }
+    
+    .sticky-add-to-cart__button {
+      height: 30px;
+      min-width: 30px;
+      padding: 0 8px;
     }
   }
 {% endstylesheet %}
