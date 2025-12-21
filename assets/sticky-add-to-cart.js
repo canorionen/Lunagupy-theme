@@ -373,6 +373,7 @@ class StickyAddToCartComponent extends Component {
     if (!stickyBar) return;
     this.#isStuck = true;
     stickyBar.dataset.stuck = 'true';
+    document.body.classList.add('sticky-cart-visible');
   }
 
   /**
@@ -383,6 +384,7 @@ class StickyAddToCartComponent extends Component {
     if (!stickyBar) return;
     this.#isStuck = false;
     stickyBar.dataset.stuck = 'false';
+    document.body.classList.remove('sticky-cart-visible');
   }
 
   // Helper methods
