@@ -279,45 +279,70 @@
   body {
     --header-height: 60px;
     --header-group-height: var(--header-height);
-    --transparent-header-offset-boolean: 0; /* stylelint-disable-line declaration-property-value-disallowed-list */
+    --transparent-header-offset-boolean: 0;
   }
 
+  /* LIQUID GLASS HEADER TRANSFORMATION */
   .header {
     display: block;
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    margin: 5px 20px 10px 20px !important; /* Gaps for floating effect */
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
   }
-
+  
+  /* Override Transparent Header to still be Glassy but maybe lighter if needed, 
+     but user likely wants consistent glass. 
+     If it's 'transparent' mode, keeping it glass often looks better than invisible text on complex backgrounds. */
   .header[transparent] {
-    --language-button-background-color: transparent;
-    --language-button-border-color: transparent;
-    --header-bg-color: transparent;
-    --header-logo-display: none;
-    --header-logo-inverse-display: block;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    background-color: transparent;
     z-index: var(--layer-overlay);
+    /* Keep glass effect even when 'transparent' setting is on, for readability */
+    background-color: rgba(255, 255, 255, 0.55) !important;
+    
+    /* FORCE TEXT VISIBILITY: If we enforce light glass, we must enforce dark text */
+    color: #000 !important;
+    --color-foreground: 0 0 0; /* Update CSS variable if used */
   }
 
-  /* Force base.css to handle the pill design - remove all !important transparent overrides here */
+  .header[transparent] .header__menu-item,
+  .header[transparent] .header__active-menu-item,
+  .header[transparent] .header__icon,
+  .header[transparent] .header__icon span,
+  .header[transparent] .list-menu__item {
+     color: #000 !important;
+     fill: #000 !important;
+  }
+
+
   .header-section {
     position: relative;
     z-index: var(--layer-heightened);
   }
   
+  /* Ensure inner rows don't double-up backgrounds */
   .header__row {
     position: relative;
-    background-color: var(--header-bg-color, transparent);
+    background-color: transparent !important;
   }
 
   .header__columns {
     display: grid;
     grid-template-areas: 'left center right';
     align-items: center;
+    padding: 10px 0; /* Add some internal breathing room */
   }
 
   @media screen and (max-width: 749px) {
+    .header {
+      margin: 5px 10px 10px 10px !important;
+    }
     .header__columns {
       grid-template-areas: 'leftA leftB center rightA rightB';
     }

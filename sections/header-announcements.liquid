@@ -39,18 +39,40 @@
 </aside>
 
 {% stylesheet %}
-  /* Clear section-specific styles to allow base.css full control */
-  .section-header-announcements {
-    background: transparent !important;
-    border: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
+  /* Liquid Glass Announcement Bar Fix */
+  .announcement-bar {
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    margin: 10px 20px 5px 20px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    overflow: hidden;
+    position: relative;
+    z-index: 100;
   }
-  
+
+  /* Force Dark Text for Visibility on Glass */
+  .announcement-bar p, 
+  .announcement-bar a, 
+  .announcement-bar .announcement-bar__message {
+    color: #222 !important;
+    font-weight: 500;
+    text-shadow: none !important;
+  }
+
+  /* Link Overlay */
   .announcement-bar__link {
     position: absolute;
     inset: 0;
     z-index: 2;
+  }
+
+  @media screen and (max-width: 749px) {
+    .announcement-bar {
+      margin: 10px 10px 5px 10px !important;
+    }
   }
 {% endstylesheet %}
 
