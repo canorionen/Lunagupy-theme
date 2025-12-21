@@ -1,0 +1,443 @@
+{% schema %}
+{
+  "name": "Glass Navigation",
+  "settings": [
+    {
+      "type": "range",
+      "id": "bottom_offset",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom Offset",
+      "default": 35
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp Number",
+      "info": "Enter your phone number (e.g., 905551234567)"
+    },
+    {
+      "type": "number",
+      "id": "free_shipping_threshold",
+      "label": "Free Shipping Threshold (Amount)",
+      "default": 500,
+      "info": "Enter the amount for free shipping (e.g. 500 for 500 TL)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_mobile",
+      "label": "Show on Mobile",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_desktop",
+      "label": "Show on Desktop",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Glass Navigation"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  /* Base Styles */
+  .glass-nav-wrapper {
+    position: fixed;
+    bottom: {{ section.settings.bottom_offset }}px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+    width: auto;
+    max-width: 95vw;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    transition: bottom 0.3s ease;
+  }
+
+  {% unless section.settings.show_on_desktop %}
+    @media screen and (min-width: 750px) {
+      .glass-nav-wrapper { display: none; }
+    }
+  {% endunless %}
+
+  {% unless section.settings.show_on_mobile %}
+    @media screen and (max-width: 749px) {
+      .glass-nav-wrapper { display: none; }
+    }
+  {% endunless %}
+
+  .glass-nav-container {
+    pointer-events: auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 16px 40px;
+    border-radius: 9999px;
+
+    /* REVISED Material System (visionOS Glass) */
+    background-color: rgba(245, 245, 247, 0.65); 
+    backdrop-filter: blur(40px) saturate(160%);
+    -webkit-backdrop-filter: blur(40px) saturate(160%);
+    
+    /* Stronger, more dimensional shadows and borders */
+    box-shadow: 
+      0 30px 60px -15px rgba(0, 0, 0, 0.2), 
+      inset 0 0 0 1px rgba(255, 255, 255, 0.7), 
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+      
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* Spotlight effect layer */
+  .glass-nav-spotlight-layer {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: radial-gradient(
+      Circle 160px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(255, 255, 255, 0.8),
+      transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  .glass-nav-container:hover .glass-nav-spotlight-layer {
+     opacity: 1;
+  }
+
+  .glass-nav-item {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    text-decoration: none;
+    color: #4a4a4a; 
+    border-radius: 50%;
+    /* Spring physics transition */
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* 
+     HOVER FIX:
+     Only apply the "Lift" effect on devices that support hover (mouse).
+     This prevents the icon from getting "stuck" up on touch devices after tapping.
+  */
+  @media (hover: hover) {
+    .glass-nav-item:hover {
+      color: #000;
+      background-color: rgba(255, 255, 255, 0.6);
+      transform: translateY(-8px) scale(1.1); 
+      box-shadow: 
+        0 12px 20px -8px rgba(0, 0, 0, 0.15),
+        0 4px 8px -4px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+    
+    .glass-nav-item:hover .glass-nav-icon {
+      /* Scale icon slightly on hover for extra juice */
+      transform: scale(1.05); 
+    }
+  }
+
+  /* Active/Touch Feedback for mobile */
+  .glass-nav-item:active {
+    transform: translateY(-2px) scale(0.9);
+    background-color: rgba(0,0,0,0.05);
+  }
+
+  .glass-nav-icon {
+    width: 32px; 
+    height: 32px;
+    display: block;
+    fill: currentColor;
+    filter: drop-shadow(0 1px 0 rgba(255,255,255,0.8));
+    shape-rendering: geometricPrecision;
+    transition: transform 0.3s ease;
+    /* Ensure icon doesn't block clicks */
+    pointer-events: none; 
+  }
+  
+  /* CART PROGRESS BACKGROUND */
+  .cart-progress-bg {
+    position: absolute;
+    inset: -6px; /* Slightly larger than the item */
+    border-radius: 50%;
+    z-index: -1;
+    overflow: hidden;
+    
+    /* The circular background container */
+    background-color: rgba(0, 0, 0, 0.05); /* Subtle gray default */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .cart-progress-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--progress-percent, 0%);
+    /* Stronger, more visible color */
+    background-color: rgba(223, 159, 119, 0.9); 
+    transition: height 0.5s ease-out;
+    
+    /* Liquid glass effect on the fill */
+    box-shadow: 0 0 15px rgba(223, 159, 119, 0.6); 
+    backdrop-filter: blur(0px); /* Remove blur to make it clearer */
+  }
+
+  /* Free Shipping Notification */
+  .glass-nav-notification {
+    position: absolute;
+    bottom: 0; /* Starts behind the nav */
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    background-color: rgba(245, 245, 247, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    padding: 8px 16px;
+    border-radius: 99px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: -1; /* Behind the nav */
+    white-space: nowrap;
+    color: #111;
+    font-size: 13px;
+    font-weight: 500;
+    pointer-events: none;
+  }
+
+  .glass-nav-notification.show {
+    opacity: 1;
+    bottom: 85px; /* Slides up */
+    transform: translateX(-50%) scale(1);
+  }
+  
+  .glass-nav-item.celebrating .glass-nav-icon {
+    animation: celebration-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: #e67e22; /* Celebrate color */
+  }
+  
+  .glass-nav-item.celebrating::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    margin-left: -50%;
+    margin-top: -50%;
+    border-radius: 50%;
+    border: 2px solid #e67e22;
+    opacity: 0;
+    pointer-events: none;
+    animation: celebration-ripple 0.8s ease-out;
+  }
+
+  @keyframes celebration-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+  }
+  @keyframes celebration-ripple {
+    0% { transform: scale(0.8); opacity: 1; border-width: 6px; }
+    100% { transform: scale(2.5); opacity: 0; border-width: 0px; }
+  }
+
+  /* Responsive Adjustments */
+  @media screen and (max-width: 480px) {
+    .glass-nav-container {
+      padding: 12px 24px;
+      gap: 20px;
+    }
+    .glass-nav-icon {
+      width: 28px;
+      height: 28px;
+    }
+    .glass-nav-item {
+      width: 42px;
+      height: 42px;
+    }
+    .cart-progress-bg {
+      inset: -4px;
+    }
+  }
+</style>
+
+<div class="glass-nav-wrapper">
+  <div id="GlassNotification" class="glass-nav-notification">
+    ✨ Ücretsiz kargoya hak kazandın!
+  </div>
+  <nav class="glass-nav-container" id="GlassNavContainer">
+    <div class="glass-nav-spotlight-layer"></div>
+    
+    <!-- Home Icon -->
+    <a href="{{ routes.root_url }}" class="glass-nav-item" aria-label="Ana Sayfa">
+      <svg class="glass-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21.205 7.765a2.93 2.93 0 0 0-1.16-1.28l-6.47-4a3 3 0 0 0-3.16 0l-6.47 4a3 3 0 0 0-1.12 1.29a2.92 2.92 0 0 0-.24 1.7l1.68 10a2.94 2.94 0 0 0 1 1.79a3 3 0 0 0 1.9.7h9.62a3 3 0 0 0 1.94-.7a2.9 2.9 0 0 0 1-1.79l1.68-10a3 3 0 0 0-.2-1.71m-5.86 9.7h-6.69a1 1 0 0 1 0-2h6.69a1 1 0 1 1 0 2"></path>
+      </svg>
+    </a>
+
+    <!-- Cart Icon with Liquid Progress -->
+    {%- assign threshold = section.settings.free_shipping_threshold | times: 100.0 -%}
+    {%- assign cart_total = cart.total_price | times: 1.0 -%}
+    {%- assign progress = 0 -%}
+    {%- if threshold > 0 -%}
+      {%- assign progress = cart_total | divided_by: threshold | times: 100 -%}
+    {%- endif -%}
+    {%- if progress > 100 -%}{%- assign progress = 100 -%}{%- endif -%}
+
+    <a href="{{ routes.cart_url }}" class="glass-nav-item" aria-label="Sepet" id="cartNavIcon">
+      <!-- Progress Background -->
+      <div class="cart-progress-bg">
+        <div class="cart-progress-fill" style="--progress-percent: {{ progress }}%;"></div>
+      </div>
+      
+      <svg class="glass-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M7.548 22.253a1.25 1.25 0 1 1 0-2.5a1.25 1.25 0 0 1 0 2.5m10.4 0a1.25 1.25 0 1 1 0-2.5a1.25 1.25 0 0 1 0 2.5m3.08-14.7a.682.682 0 0 0 0-.14a2.48 2.48 0 0 0-1.49-1.61a4.68 4.68 0 0 0-1.8-.28H5.228l-.79-3.2a.75.75 0 1 0-1.46.35l.94 3.78c.52 2 .94 3.76 1.3 5.43c0 .14 0 .27.08.4c.12.52.24 1.05.33 1.56c.12.74.29 1.472.51 2.19c.163.396.429.741.77 1a2.48 2.48 0 0 0 1.18.46h.91c.273.015.547.015.82 0h6.73a3.06 3.06 0 0 0 2.26-.78l.08-.08a3.67 3.67 0 0 0 .78-1.9c.16-.93.37-1.88.56-2.77a.43.43 0 0 0 0-.11c.06-.22.1-.44.15-.65c.05-.21.11-.52.17-.79c.06-.27.13-.62.17-.83a4.48 4.48 0 0 0 .31-2.03m-2.81 7a2.06 2.06 0 0 1-.43 1.11a1.44 1.44 0 0 1-.48.28a1.67 1.67 0 0 1-.66.07h-6.92a8.462 8.462 0 0 1-1.51 0a1.001 1.001 0 0 1-.43-.17a.91.91 0 0 1-.26-.29a15.438 15.438 0 0 1-.44-1.93c-.07-.37-.15-.74-.22-1.11h11.75c-.14.63-.28 1.31-.4 2.01z"></path>
+      </svg>
+    </a>
+
+    <!-- WhatsApp Icon -->
+    {% assign whatsapp_url = 'https://wa.me/' | append: section.settings.whatsapp_number %}
+    {% if section.settings.whatsapp_number == blank %}
+      {% assign whatsapp_url = '#' %}
+    {% endif %}
+    
+    <a href="{{ whatsapp_url }}" class="glass-nav-item" aria-label="WhatsApp" {% if section.settings.whatsapp_number != blank %}target="_blank"{% endif %}>
+      <svg class="glass-nav-icon" viewBox="0 0 432 432" fill="currentColor">
+         <path d="M364.5 65Q427 127 427 214.5T364.5 364T214 426q-54 0-101-26L0 429l30-109Q2 271 2 214q0-87 62-149T214 3t150.5 62zM214 390q73 0 125-51.5T391 214T339 89.5T214 38T89.5 89.5T38 214q0 51 27 94l4 6l-18 65l67-17l6 3q42 25 90 25zm97-132q9 5 10 7q4 6-3 25q-3 8-15 15.5t-21 9.5q-18 2-33-2q-17-6-30-11q-8-4-15.5-8.5t-14.5-9t-13-9.5t-11.5-10t-10.5-10.5t-8.5-9.5t-7-8.5t-5.5-7t-3.5-5L128 222q-22-29-22-55q0-24 19-44q6-7 14-7q6 0 10 1q8 0 12 9q2 3 6 13l7 17.5l3 8.5q3 5 1 9q-3 7-5 9l-3 3l-3 3.5l-2 2.5q-6 6-3 11q13 22 30 37q13 11 43 26q7 3 11-1q12-15 17-21q4-6 12-3q6 3 36 17z"></path>
+      </svg>
+    </a>
+
+    <!-- Account Icon -->
+    <a href="{{ routes.account_url }}" class="glass-nav-item" aria-label="Hesabım">
+      <svg class="glass-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M11.967 1.752c-2.15.01-4.244.695-5.984 1.957a10.234 10.234 0 0 0-.126 16.493c.05.049.107.09.17.12a10.228 10.228 0 0 0 11.95 0a.831.831 0 0 0 .18-.13a10.235 10.235 0 0 0-.172-16.506a10.278 10.278 0 0 0-5.998-1.934zm0 3.76a4.162 4.162 0 0 1 3.878 2.534a4.144 4.144 0 0 1-.882 4.543A4.158 4.158 0 0 1 7.86 9.632a4.147 4.147 0 0 1 1.21-2.898a4.16 4.16 0 0 1 2.897-1.222m4.627 13.92a8.754 8.754 0 0 1-9.245 0a8.094 8.094 0 0 1-1.212-.9a7.126 7.126 0 0 1 2.144-2a7.23 7.23 0 0 1 7.382 0a7.125 7.125 0 0 1 2.143 2c-.375.337-.78.638-1.212.9"></path>
+      </svg>
+    </a>
+
+  </nav>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const navContainer = document.getElementById('GlassNavContainer');
+    
+    // 1. Spotlight Effect
+    if (navContainer) {
+        navContainer.addEventListener('mousemove', (e) => {
+            const rect = navContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            navContainer.style.setProperty('--mouse-x', `${x}px`);
+            navContainer.style.setProperty('--mouse-y', `${y}px`);
+        });
+    }
+
+    // 2. Dynamic Cart Progress
+    // Get threshold from settings (in cents)
+    const shippingThreshold = {{ section.settings.free_shipping_threshold | times: 100 }};
+    
+    function updateGlassCartProgress() {
+       fetch(window.Shopify.routes.root + 'cart.js')
+       .then(response => response.json())
+       .then(cart => {
+          const total = cart.total_price;
+          let percent = 0;
+          
+          if (shippingThreshold > 0) {
+             percent = (total / shippingThreshold) * 100;
+          }
+          if (percent > 100) percent = 100;
+          
+          const fillElement = document.querySelector('.cart-progress-fill');
+          if (fillElement) {
+             fillElement.style.setProperty('--progress-percent', percent + '%');
+          }
+          
+          // Trigger celebration if 100% reached
+          if (percent >= 100) {
+              const cartIcon = document.getElementById('cartNavIcon');
+              const notification = document.getElementById('GlassNotification');
+              
+              if (cartIcon && !cartIcon.classList.contains('celebrated')) {
+                  cartIcon.classList.add('celebrating');
+                  cartIcon.classList.add('celebrated'); 
+                  
+                  // Show Notification
+                  if (notification) {
+                    notification.classList.add('show');
+                    // Hide after 4 seconds
+                    setTimeout(() => {
+                      notification.classList.remove('show');
+                    }, 4000);
+                  }
+
+                  setTimeout(() => {
+                      cartIcon.classList.remove('celebrating');
+                  }, 1000);
+              }
+          } else {
+             // If drops below 100 (item removed), remove flag so it can celebrate again
+             const cartIcon = document.getElementById('cartNavIcon');
+             const notification = document.getElementById('GlassNotification');
+             if (cartIcon) cartIcon.classList.remove('celebrated');
+             if (notification) notification.classList.remove('show');
+          }
+       })
+       .catch(err => console.error('GlassNav Cart Error:', err));
+    }
+
+    // Intercept standard Fetch API requests to detect cart changes
+    const originalFetch = window.fetch;
+    window.fetch = function() {
+        return originalFetch.apply(this, arguments).then((response) => {
+            // Check if the URL involves cart operations
+            if (response.url && (
+                response.url.includes('/cart/add') || 
+                response.url.includes('/cart/update') || 
+                response.url.includes('/cart/change') ||
+                response.url.includes('/cart/clear')
+            )) {
+                 // Wait slightly for Shopify to process, then update our specific bar
+                 setTimeout(updateGlassCartProgress, 500);
+            }
+            return response;
+        });
+    };
+
+    // Intercept XHR (for older themes/apps using jQuery or axios)
+    const originalOpen = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function() {
+        this.addEventListener('load', function() {
+            if (this.responseURL && (
+                this.responseURL.includes('/cart/add') || 
+                this.responseURL.includes('/cart/update') || 
+                this.responseURL.includes('/cart/change') ||
+                this.responseURL.includes('/cart/clear')
+            )) {
+                 setTimeout(updateGlassCartProgress, 500);
+            }
+        });
+        originalOpen.apply(this, arguments);
+    };
+});
+</script>

@@ -1,0 +1,498 @@
+{% comment %}
+====================================================================================
+  Sizden Gelenler Video Karuseli - Sürüm 9.1 (Hata Düzeltmesi)
+====================================================================================
+  Bu section, müşteri videolarını sergilemek için tasarlanmıştır.
+  Splide.js kütüphanesi kullanılarak oluşturulmuştur.
+
+  Öne Çıkan İyileştirmeler:
+  - Hata Düzeltmesi: "columns_mobile" ayarının tipi, Shopify şema kurallarına
+    uyması için 'range' yerine 'select' olarak değiştirildi.
+  - Tamamen Yeniden Yapılandırılmış Mantık: Modern görünümdeki merkezleme ve
+    görünürlük sorunları, Splide.js'in 'focus: center' ve 'padding'
+    özellikleri kullanılarak kökten çözüldü.
+  - Gelişmiş Video Kontrolü: Aktif video otomatik oynatılırken diğer tüm
+    videoların duraklatılması sağlandı. Kullanıcının sessize alma tercihi
+    (isUnmutedSession) slaytlar arasında korunur.
+  - Optimize Edilmiş CSS: Daha temiz, okunabilir ve BEM benzeri bir isimlendirme
+    kullanılarak stiller yeniden yazıldı. Gereksiz CSS kuralları kaldırıldı.
+  - Sağlamlaştırılmış JavaScript: Kod, yeniden kullanılabilir fonksiyonlar
+    içine alındı ve Shopify Tema Editörü ile tam uyumlu çalışması için
+    (load, reorder, select eventleri) sağlamlaştırıldı.
+  - Erişilebilirlik (A11Y): Butonlar ve kontroller için temel ARIA etiketleri
+    korundu.
+====================================================================================
+{% endcomment %}
+
+{%- liquid
+  assign section_id = 'video-carousel-' | append: section.id
+-%}
+
+{{ 'splide.min.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'splide.min.js' | asset_url }}" defer="defer"></script>
+
+<div
+  id="{{ section_id }}"
+  class="video-carousel-wrapper color-{{ section.settings.color_scheme }} gradient {% if section.settings.enable_modern_look %}modern-look-enabled{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-columns-desktop="{{ section.settings.columns_desktop }}"
+  data-columns-tablet="{{ section.settings.columns_tablet }}"
+  data-columns-mobile="{{ section.settings.columns_mobile }}"
+>
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="video-carousel__title title h2">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div
+        class="splide video-carousel"
+        role="group"
+        aria-label="{{ section.settings.heading | default: 'Müşteri videoları galerisi' | escape }}"
+      >
+        <div class="splide__track">
+          <ul class="splide__list">
+            {%- for block in section.blocks -%}
+              <li class="splide__slide" {{ block.shopify_attributes }}>
+                <div class="video-carousel__slide-container" tabindex="0">
+                  <div class="video-carousel__media-wrapper">
+                    {%- if block.settings.video != blank -%}
+                      {%- liquid
+                        assign poster_image = block.settings.poster | image_url: width: 1200
+                      -%}
+                      {{ block.settings.video | video_tag:
+                        class: "video-carousel__media",
+                        loop: true,
+                        controls: false,
+                        muted: true,
+                        playsinline: true,
+                        poster: poster_image
+                      }}
+                    {%- else -%}
+                      <div class="video-carousel__media-placeholder">
+                        {{ 'video' | placeholder_svg_tag: 'placeholder-svg' }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                  <div class="video-carousel__overlay">
+                    <button type="button" class="video-carousel__mute-button" aria-label="Sesi aç veya kapat">
+                      <span class="icon-unmute">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/></svg>
+                      </span>
+                      <span class="icon-mute">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M7 9v6h4l5 5V4l-5 5H7z"/></svg>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- style -%}
+  #{{ section_id }} {
+    --video-aspect-ratio: {% if section.settings.aspect_ratio == '9/16' %}177.77%{% else %}56.25%{% endif %};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    overflow: hidden;
+  }
+
+  #{{ section_id }} .video-carousel__title {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  #{{ section_id }} .splide__list {
+    align-items: center; /* Slaytları dikeyde ortalar */
+  }
+
+  /* --- Standart Görünüm --- */
+  #{{ section_id }}:not(.modern-look-enabled) .splide__slide {
+    padding: 0 0.75rem; /* Slaytlar arası boşluk */
+  }
+
+  /* --- Genel Slayt Stilleri --- */
+  #{{ section_id }} .video-carousel__slide-container {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.05);
+    -webkit-mask-image: -webkit-radial-gradient(white, black); /* Köşeleri yumuşatmak için */
+    transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 400ms ease;
+  }
+
+  #{{ section_id }} .video-carousel__media-wrapper {
+    position: relative;
+    height: 0;
+    padding-bottom: var(--video-aspect-ratio);
+  }
+
+  #{{ section_id }} .video-carousel__media,
+  #{{ section_id }} .video-carousel__media-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  #{{ section_id }} .video-carousel__media-placeholder .placeholder-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* --- Kontrol Butonları ve Overlay --- */
+  #{{ section_id }} .video-carousel__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    opacity: 0;
+    background-image: linear-gradient(to top, rgba(0,0,0,0.3), transparent 40%);
+    transition: opacity 0.3s ease;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 1rem;
+  }
+
+  #{{ section_id }} .video-carousel__slide-container:hover .video-carousel__overlay {
+    opacity: 1;
+  }
+
+  #{{ section_id }} .video-carousel__mute-button {
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+  #{{ section_id }} .video-carousel__mute-button:hover {
+    transform: scale(1.1);
+    background: rgba(0, 0, 0, 0.7);
+  }
+  #{{ section_id }} .video-carousel__mute-button svg {
+    fill: currentColor;
+  }
+  #{{ section_id }} .video-carousel__mute-button .icon-mute { display: none; }
+  #{{ section_id }} .video-carousel__mute-button.is-muted .icon-unmute { display: none; }
+  #{{ section_id }} .video-carousel__mute-button.is-muted .icon-mute { display: block; }
+
+  /* --- Oklar ve Sayfalama --- */
+  #{{ section_id }} .splide__arrow {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  #{{ section_id }} .splide__arrow:hover {
+    background: #fff;
+  }
+  #{{ section_id }} .splide__arrow svg {
+    fill: rgba(0,0,0,0.7);
+  }
+  #{{ section_id }} .splide__pagination {
+    display: none; /* Tasarımda istenmiyor */
+  }
+
+  /* --- Modern Görünüm Stilleri --- */
+  .modern-look-enabled .splide__track {
+    overflow: visible; /* Yanlardaki slaytların görünmesi için gerekli */
+  }
+  .modern-look-enabled .splide__slide {
+    transform: scale(0.85);
+    opacity: 0.7;
+    z-index: 1;
+  }
+  .modern-look-enabled .splide__slide.is-active {
+    transform: scale(1);
+    opacity: 1;
+    z-index: 2; /* Aktif slaytın diğerlerinin üzerinde kalmasını sağlar */
+  }
+  .modern-look-enabled .splide__arrow {
+    /* Okları dikeyde biraz yukarı taşıyarak daha iyi bir görünüm sağlar */
+    transform: translateY(calc(-50% - var(--video-aspect-ratio) * 0.1));
+  }
+{%- endstyle -%}
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const sectionId = '{{ section_id }}';
+  const sectionElement = document.getElementById(sectionId);
+
+  // Splide kütüphanesi yüklenene kadar bekleyen yardımcı fonksiyon
+  const waitForSplide = (callback) => {
+    if (typeof Splide !== 'undefined') {
+      callback();
+    } else {
+      setTimeout(() => waitForSplide(callback), 50);
+    }
+  };
+
+  const initVideoCarousel = (container) => {
+    // Eğer section zaten başlatılmışsa tekrar başlatma
+    if (container.dataset.initialized === 'true') return;
+    const splideElement = container.querySelector('.splide');
+    if (!splideElement) return;
+
+    // Eğer bir splide instance zaten varsa, önce onu yok et (Tema editörü için)
+    if (splideElement.splide) {
+      splideElement.splide.destroy(true);
+    }
+
+    const isModernLook = container.classList.contains('modern-look-enabled');
+    let sessionMuted = true; // Oturum boyunca ses durumunu saklar
+    let splideOptions;
+
+    if (isModernLook) {
+      // Modern görünüm için 'focus: center' ve 'padding' kullanılır.
+      // Bu, aktif slaytı ortalar ve yanlardaki slaytların bir kısmını gösterir.
+      splideOptions = {
+        type: 'loop',
+        perPage: 1, // Merkezleme için her zaman 1 olmalı
+        focus: 'center', // Aktif slaytı ortalar
+        trimSpace: false, // Loop modunda focus ile birlikte gereklidir
+        gap: '1.5rem',
+        padding: '22%', // Yanlardaki slaytları göstermek için boşluk
+        arrows: true,
+        pagination: false,
+        breakpoints: {
+          1024: { padding: '18%', gap: '1rem' },
+          767: { padding: '15%', gap: '1rem' },
+        },
+      };
+    } else {
+      // Standart görünüm, schema'dan gelen sütun sayılarını kullanır.
+      const desktopCols = parseInt(container.dataset.columnsDesktop, 10) || 3;
+      const tabletCols = parseInt(container.dataset.columnsTablet, 10) || 2;
+      const mobileCols = parseInt(container.dataset.columnsMobile, 10) || 1;
+      splideOptions = {
+        type: 'slide',
+        perPage: desktopCols,
+        gap: '1.5rem',
+        arrows: true,
+        pagination: false,
+        breakpoints: {
+          1024: { perPage: tabletCols },
+          767: { perPage: mobileCols, gap: '1rem' },
+        },
+      };
+    }
+
+    const splide = new Splide(splideElement, splideOptions);
+
+    const updateVideoPlayback = () => {
+      // Tüm videoları önce bir duraklat
+      splide.Components.Slides.get().forEach(slide => {
+        const video = slide.slide.querySelector('video');
+        if (video && !video.paused) {
+          video.pause();
+        }
+      });
+
+      // Sadece aktif olan videoyu oynat
+      const activeSlide = splide.Components.Slides.getAt(splide.index)?.slide;
+      const activeVideo = activeSlide?.querySelector('video');
+      if (activeVideo) {
+        activeVideo.muted = sessionMuted;
+        activeVideo.play().catch(e => console.error("Video oynatılamadı:", e));
+      }
+    };
+
+    // Karusel hareket ettiğinde video oynatımını güncelle
+    splide.on('moved', updateVideoPlayback);
+
+    // Karusel yüklendiğinde ilk videoyu oynat
+    splide.on('mounted', updateVideoPlayback);
+
+    splide.mount();
+    container.dataset.initialized = 'true';
+
+    // Her bir video için olay dinleyicilerini ayarla
+    container.querySelectorAll('.video-carousel__slide-container').forEach(slideContainer => {
+      const video = slideContainer.querySelector('.video-carousel__media');
+      const muteBtn = slideContainer.querySelector('.video-carousel__mute-button');
+
+      if (!video || !muteBtn) return;
+
+      // Videonun üzerine (ama butonun üzerine değil) tıklandığında oynat/durdur
+      slideContainer.addEventListener('click', (e) => {
+        if (!e.target.closest('.video-carousel__mute-button')) {
+          if (video.paused) {
+            video.play().catch(e => console.error("Video oynatılamadı:", e));
+          } else {
+            video.pause();
+          }
+        }
+      });
+
+      // Ses butonuna tıklandığında
+      muteBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Üstteki click event'ini tetiklemesini engelle
+        const newMutedState = !video.muted;
+        video.muted = newMutedState;
+        sessionMuted = newMutedState; // Oturum tercihini güncelle
+      });
+
+      // Video durumu değiştikçe butonun class'ını güncelle
+      video.addEventListener('volumechange', () => {
+        muteBtn.classList.toggle('is-muted', video.muted);
+      });
+
+      // Başlangıç durumunu ayarla
+      muteBtn.classList.toggle('is-muted', video.muted);
+    });
+  };
+
+  // Ana başlatma fonksiyonunu çağır
+  waitForSplide(() => initVideoCarousel(sectionElement));
+
+  // Shopify Tema Editörü olayları için dinleyiciler
+  if (Shopify.designMode) {
+    const reinit = () => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.dataset.initialized = 'false';
+        waitForSplide(() => initVideoCarousel(element));
+      }
+    };
+    document.addEventListener('shopify:section:load', reinit);
+    document.addEventListener('shopify:section:reorder', reinit);
+    document.addEventListener('shopify:section:select', reinit);
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Sizden Gelenler Karusel",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Sizden Gelenler",
+      "label": "Başlık"
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Video En Boy Oranı",
+      "options": [
+        { "value": "16/9", "label": "Yatay (16:9)" },
+        { "value": "9/16", "label": "Dikey (9:16)" }
+      ],
+      "default": "9/16",
+      "info": "Tüm videoların aynı oranda olması önerilir."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Renk Şeması",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Görünüm Ayarları"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_modern_look",
+      "label": "Modern Görünümü Etkinleştir",
+      "info": "Aktif videoyu ortaya alıp büyütür, diğerlerini küçültür. Bu seçenek aktifken aşağıdaki standart düzen ayarları geçersizdir.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Standart Düzen Ayarları",
+      "info": "Sadece 'Modern Görünüm' kapalıyken geçerlidir."
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1, "max": 5, "step": 1,
+      "label": "Masaüstü Sütun Sayısı (1025px+)",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "min": 1, "max": 3, "step": 1,
+      "label": "Tablet Sütun Sayısı (768px - 1024px)",
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Mobil Sütun Sayısı (0 - 767px)",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "header",
+      "content": "Bölüm Boşlukları"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0, "max": 100, "step": 4, "unit": "px",
+      "label": "Üst Boşluk",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0, "max": 100, "step": 4, "unit": "px",
+      "label": "Alt Boşluk",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "image_picker",
+          "id": "poster",
+          "label": "Video Kapak Görseli",
+          "info": "Video yüklenirken veya oynatılamadığında gösterilir. Eklenmesi şiddetle tavsiye edilir."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sizden Gelenler Karusel",
+      "blocks": [
+        { "type": "video" },
+        { "type": "video" },
+        { "type": "video" },
+        { "type": "video" },
+        { "type": "video" }
+      ]
+    }
+  ]
+}
+{% endschema %}
