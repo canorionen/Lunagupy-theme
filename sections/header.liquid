@@ -407,18 +407,64 @@
 
     /* will default to bg from its color scheme unless --header-bg-color is transparent */
     background-color: var(--header-bg-color, var(--color-background));
+    
+    /* LIQUID GLASS EFFECT */
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    
+    /* Dimensional shadows and borders */
+    box-shadow: 
+      0 30px 60px -15px rgba(0, 0, 0, 0.12), 
+      inset 0 0 0 1px rgba(255, 255, 255, 0.5), 
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.6);
+    
+    /* Rounded corners */
+    border-radius: 20px;
+    
+    /* Remove default borders */
+    border-bottom: none !important;
+    
+    /* Spacing from edges */
+    margin: 15px;
+    margin-bottom: 0;
+    width: calc(100% - 30px);
+    
+    /* Smooth transitions */
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  
+  /* Mobile adjustments */
+  @media screen and (max-width: 749px) {
+    .header__row {
+      margin: 10px;
+      margin-bottom: 0;
+      width: calc(100% - 20px);
+      border-radius: 16px;
+    }
+  }
+  
+  /* Ensure header section has space for the announcement bar above */
+  .header-section {
+    margin-top: 70px; /* Space for announcement bar */
+  }
+  
+  @media screen and (max-width: 749px) {
+    .header-section {
+      margin-top: 60px;
+    }
   }
 
   .header__row--top:not(.divider--page-width),
   .header__row--top.divider--page-width .header__columns,
   .header__row--bottom {
-    border-bottom: var(--border-bottom-width) solid var(--color-border);
+    border-bottom: none !important; /* Override all borders */
   }
 
   @media screen and (max-width: 749px) {
     .header__row--top:not(.divider--page-width),
     .header__row--top.divider--page-width .header__columns {
-      border-bottom-width: var(--border-bottom-width-mobile);
+      border-bottom-width: 0 !important;
     }
   }
 

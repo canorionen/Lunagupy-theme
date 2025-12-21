@@ -8,7 +8,7 @@
   ></script>
 {% endif %}
 
-<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div class="section-background color-{{ section.settings.color_scheme }}" style="display: none;"></div>
 <aside
   class="announcement-bar spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
   style="{% render 'spacing-padding', settings: section.settings %}; --border-bottom-width: {{ section.settings.divider_width }}px;"
@@ -40,7 +40,46 @@
 
 {% stylesheet %}
   .announcement-bar {
-    border-block-end: var(--border-bottom-width) solid var(--color-border);
+    /* Remove default border */
+    border-block-end: none !important;
+    
+    /* Make it fixed and float from top */
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99998; /* Just below glass nav */
+    width: calc(100% - 30px);
+    max-width: 1400px;
+    
+    /* Liquid Glass Effect */
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    
+    /* Rounded corners */
+    border-radius: 20px;
+    
+    /* Dimensional shadows and borders */
+    box-shadow: 
+      0 30px 60px -15px rgba(0, 0, 0, 0.12), 
+      inset 0 0 0 1px rgba(255, 255, 255, 0.5), 
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.6);
+    
+    /* Override color scheme */
+    --color-background: transparent !important;
+    
+    /* Smooth transitions */
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  
+  /* Mobile adjustments */
+  @media screen and (max-width: 749px) {
+    .announcement-bar {
+      top: 10px;
+      width: calc(100% - 20px);
+      border-radius: 16px;
+    }
   }
 
   .announcement-bar__slider {
