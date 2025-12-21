@@ -492,51 +492,86 @@
       inset: -2px;
     }
   }
+  /* WINDOW OPEN STATES */
+  .glass-menu-window.open {
     opacity: 1;
     pointer-events: auto;
-    /* Rise up above the nav bar (approx 80-90px up) */
-    transform: translateX(-50%) translateY(-95px) scale(1);
+    transform: translateX(-50%) translateY(-100px) scale(1);
+    z-index: 100;
   }
 
-  /* Menu Title */
+  .glass-search-window.open {
+    opacity: 1;
+    pointer-events: auto;
+    /* High up for mobile keyboards */
+    transform: translateX(-50%) translateY(-55vh) scale(1);
+    z-index: 100;
+  }
+
+  /* Responsive Adjustments - Uniform spacing & Fit 6 items */
+  @media screen and (max-width: 480px) {
+    .glass-nav-wrapper {
+      width: 100vw;
+      max-width: 100vw;
+      left: 50% !important;
+      bottom: 25px;
+    }
+    .glass-nav-container {
+      padding: 8px 5px !important;
+      gap: 0 !important;
+      justify-content: space-evenly !important;
+      width: 96vw !important;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+    .glass-nav-icon {
+      width: 22px !important;
+      height: 22px !important;
+    }
+    .glass-nav-item {
+      width: 40px !important;
+      height: 40px !important;
+      margin: 0 !important;
+    }
+    .cart-progress-bg {
+      inset: -3px;
+    }
+  }
+
+  /* Hamburger and Titles */
   .glass-menu-title {
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #666;
-    margin-bottom: 8px;
-    padding-left: 8px;
-    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #888;
+    margin-bottom: 10px;
+    font-weight: 800;
+    text-align: center;
   }
 
-  /* Menu Links */
   .glass-menu-link {
     display: flex;
     align-items: center;
-    padding: 8px 12px; /* More compact padding */
-    color: #333 !important;
+    padding: 10px 15px;
+    color: #222 !important;
     text-decoration: none;
-    font-size: 13px; /* Smaller font */
+    font-size: 14px;
     font-weight: 500;
-    border-radius: 8px;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    border-radius: 10px;
+    transition: all 0.2s ease;
   }
   
   .glass-menu-link:hover {
-    background-color: rgba(255, 255, 255, 0.6);
-    transform: scale(1.02);
+    background-color: rgba(255, 255, 255, 0.7);
+    transform: translateX(4px);
   }
 
-  /* Hamburger to Close animation styles */
   .menu-icon-svg {
-    transition: transform 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .glass-nav-item.menu-active .menu-icon-svg {
     transform: rotate(90deg);
   }
-  
-  }
-  /* Previous responsive block removed, consolidated below */
 </style>
 
 <div class="glass-nav-wrapper">
@@ -799,65 +834,60 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 5. Menu & Search Toggle Logic
-    const menuButton = document.getElementById('glassMenuButton');
-    const menuWindow = document.getElementById('GlassMenuWindow');
-    const searchButton = document.getElementById('glassSearchButton');
-    const searchWindow = document.getElementById('GlassSearchWindow');
-    const searchInput = document.getElementById('GlassSearchInput');
+    // 5. Menu & Search Toggle Logic (Optimized)
+    const menuBtn = document.getElementById('glassMenuButton');
+    const menuWin = document.getElementById('GlassMenuWindow');
+    const searchBtn = document.getElementById('glassSearchButton');
+    const searchWin = document.getElementById('GlassSearchWindow');
+    const searchInp = document.getElementById('GlassSearchInput');
 
-    function closeAllGlassWindows() {
-        if(menuWindow) menuWindow.classList.remove('open');
-        if(menuButton) menuButton.classList.remove('menu-active');
-        if(searchWindow) searchWindow.classList.remove('open');
-        if(searchButton) searchButton.classList.remove('active'); // Optional styling
+    function closeAll() {
+        if(menuWin) menuWin.classList.remove('open');
+        if(menuBtn) menuBtn.classList.remove('menu-active');
+        if(searchWin) searchWin.classList.remove('open');
     }
 
-    if (menuButton && menuWindow) {
-        menuButton.addEventListener('click', (e) => {
+    if (menuBtn && menuWin) {
+        menuBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            
-            const wasOpen = menuWindow.classList.contains('open');
-            closeAllGlassWindows(); // Close search if open
-            
-            if (!wasOpen) {
-                menuWindow.classList.add('open');
-                menuButton.classList.add('menu-active');
+            const isOpen = menuWin.classList.contains('open');
+            closeAll();
+            if (!isOpen) {
+                menuWin.classList.add('open');
+                this.classList.add('menu-active');
             }
         });
     }
 
-    if (searchButton && searchWindow) {
-        searchButton.addEventListener('click', (e) => {
+    if (searchBtn && searchWin) {
+        searchBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            
-            const wasOpen = searchWindow.classList.contains('open');
-            closeAllGlassWindows(); // Close menu if open
-            
-            if (!wasOpen) {
-                searchWindow.classList.add('open');
-                searchButton.classList.add('active');
-                // Focus input after transition
-                setTimeout(() => {
-                    if(searchInput) searchInput.focus();
-                }, 100);
+            const isOpen = searchWin.classList.contains('open');
+            closeAll();
+            if (!isOpen) {
+                searchWin.classList.add('open');
+                if(searchInp) {
+                    setTimeout(() => searchInp.focus(), 150);
+                }
             }
         });
     }
 
-    // Close menu/search if clicking outside
     document.addEventListener('click', (e) => {
-        const target = e.target;
-        
-        // Define boundaries
-        const isMenuClick = (menuButton && menuButton.contains(target)) || (menuWindow && menuWindow.contains(target));
-        const isSearchClick = (searchButton && searchButton.contains(target)) || (searchWindow && searchWindow.contains(target));
-        
-        if (!isMenuClick && !isSearchClick) {
-             closeAllGlassWindows();
+        if (!e.target.closest('.glass-menu-window') && 
+            !e.target.closest('.glass-search-window') && 
+            !e.target.closest('.glass-nav-item')) {
+            closeAll();
         }
     });
+
+    // Close menu on link click
+    if(menuWin) {
+        menuWin.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => closeAll());
+        });
+    }
 });
 </script>
