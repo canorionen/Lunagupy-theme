@@ -590,8 +590,8 @@
       transform: translate(-50%, -50%) !important;
       width: calc(100vw - 40px) !important;
       max-width: 400px !important;
-      height: auto !important;
-      max-height: calc(90vh - 40px) !important;
+      height: 75vh !important; /* Fixed height for consistent layout */
+      max-height: 600px !important;
       margin: 0 !important;
     }
   }
@@ -607,12 +607,58 @@
   .cart-drawer__inner {
     border-radius: 24px !important;
     overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
   }
 
-  /* Adjust summary mask for glass */
+  /* Fixed header at top */
+  .cart-drawer__header {
+    flex-shrink: 0 !important;
+    padding: 16px !important;
+  }
+
+  /* Scrollable content area */
+  .cart-drawer__content {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    min-height: 0 !important; /* Important for flex scroll */
+  }
+
+  /* Fixed summary/footer at bottom - always visible */
   .cart-drawer__summary {
+    flex-shrink: 0 !important;
     mask-image: none !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+    padding: 16px !important;
+    background-color: rgba(245, 245, 247, 0.6) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+  }
+
+  /* Make cart items scrollable */
+  .cart-items-component {
+    overflow-y: visible !important;
+  }
+
+  /* Custom scrollbar for glass effect */
+  .cart-drawer__content::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .cart-drawer__content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+  }
+  
+  .cart-drawer__content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+  }
+  
+  .cart-drawer__content::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.25);
   }
   {% endif %}
 </style>
