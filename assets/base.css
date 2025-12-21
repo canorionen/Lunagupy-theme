@@ -4048,6 +4048,7 @@ aside.announcement-bar.announcement-bar {
   justify-content: center !important;
   visibility: visible !important;
   opacity: 1 !important;
+  overflow: hidden !important;
 }
 
 /* Force centering for the text/slider */
@@ -4056,13 +4057,24 @@ aside.announcement-bar.announcement-bar {
   justify-content: center !important;
   align-items: center !important;
   width: 100% !important;
+  height: 100% !important;
 }
 
 .announcement-bar__slides {
-  margin: 0 auto !important;
-  max-width: 100% !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.announcement-bar__slides>* {
+  grid-area: 1 / 1 !important;
+  width: 100% !important;
   display: flex !important;
   justify-content: center !important;
+  align-items: center !important;
 }
 
 /* Force text style for thin bar */
@@ -4076,9 +4088,12 @@ aside.announcement-bar.announcement-bar {
   letter-spacing: 0.1em !important;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
   text-align: center !important;
-  line-height: normal !important;
+  line-height: 1 !important;
   margin: 0 !important;
   padding: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 /* OVERLAY LAYOUT: Pages start from the very top */
