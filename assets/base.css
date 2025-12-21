@@ -4096,8 +4096,8 @@ aside.announcement-bar.announcement-bar {
   text-overflow: ellipsis !important;
 }
 
-/* OVERLAY LAYOUT: Pages start from the very top */
-#header-group {
+/* OVERLAY LAYOUT: Pages start from the very top (EXCEPT Collection) */
+body:not(.template-collection) #header-group {
   position: absolute !important;
   top: 0;
   left: 0;
@@ -4115,7 +4115,8 @@ aside.announcement-bar.announcement-bar {
 
 /* Inner Header Pill - ALWAYS FLOATING and VISIBLE */
 header-component.header {
-  position: fixed !important;
+  position: sticky !important;
+  /* Changed from fixed to sticky to reserve space when in flow */
   top: 38px !important;
   /* Responsive sitting below announcement bar */
   left: 50% !important;
@@ -4155,10 +4156,10 @@ header-component.header .header__row--bottom {
   box-shadow: none !important;
 }
 
-/* Ensure content starts at top */
-main#MainContent,
-.shopify-section,
-body {
+/* Ensure content starts at top (EXCEPT Collection) */
+body:not(.template-collection) main#MainContent,
+body:not(.template-collection) .shopify-section,
+body:not(.template-collection) {
   margin-top: 0 !important;
   padding-top: 0 !important;
 }
@@ -4227,9 +4228,4 @@ body {
     align-items: center !important;
     justify-content: center !important;
   }
-}
-
-/* Fix for Collection Pages: Start content below the fixed header */
-body.template-collection main#MainContent {
-  padding-top: 160px !important;
 }
