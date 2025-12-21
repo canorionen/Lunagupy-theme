@@ -4228,8 +4228,3 @@ body {
     justify-content: center !important;
   }
 }
-
-/* Fix for Collection Pages: Start content below the fixed header */
-body.template-collection main#MainContent {
-  padding-top: 160px !important;
-}
