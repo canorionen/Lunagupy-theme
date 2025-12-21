@@ -49,6 +49,16 @@
       "id": "menu",
       "label": "Quick Menu (Rising Window)",
       "default": "main-menu"
+    },
+    {
+      "type": "select",
+      "id": "cart_drawer_style",
+      "label": "Cart Drawer Style",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "glass", "label": "Liquid Glass" }
+      ],
+      "default": "glass"
     }
   ],
   "presets": [
@@ -549,6 +559,31 @@
   .glass-nav-item.menu-active .menu-icon-svg {
     transform: rotate(90deg);
   }
+
+  /* LIQUID GLASS CART DRAWER OVERRIDE */
+  {% if section.settings.cart_drawer_style == 'glass' %}
+  .cart-drawer__dialog {
+    background-color: rgba(245, 245, 247, 0.5) !important;
+    backdrop-filter: blur(25px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: -10px 0 50px rgba(0,0,0,0.1) !important;
+  }
+  
+  .cart-drawer__header, 
+  .cart-drawer__content, 
+  .cart-drawer__summary,
+  .cart-items-component {
+    background-color: transparent !important;
+    background: transparent !important;
+  }
+
+  /* Adjust summary mask for glass */
+  .cart-drawer__summary {
+    mask-image: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  {% endif %}
 </style>
 
 <div class="glass-nav-wrapper">
