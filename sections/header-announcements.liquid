@@ -28,17 +28,14 @@
       {% for i in (1..15) %}
         {% for block in section.blocks %}
            <div class="marquee-item" {{ block.shopify_attributes }}>
-              {% case block.type %}
-                {% when 'announcement', '_announcement' %}
-                    {% assign block_link = block.settings.url | default: block.settings.link %}
-                    {% if block_link != blank %}
-                      <a href="{{ block_link }}" class="marquee-link">
-                    {% endif %}
-                      {{ block.settings.text }}
-                    {% if block_link != blank %}
-                      </a>
-                    {% endif %}
-              {% endcase %}
+              {% assign block_link = block.settings.url | default: block.settings.link %}
+              {% if block_link != blank %}
+                <a href="{{ block_link }}" class="marquee-link">
+              {% endif %}
+                <span>{{ block.settings.text }}</span>
+              {% if block_link != blank %}
+                </a>
+              {% endif %}
               <span class="marquee-separator">•</span>
            </div>
         {% endfor %}
