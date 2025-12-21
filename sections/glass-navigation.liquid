@@ -740,15 +740,6 @@
       </div>
     </div>
     
-    <!-- Home Icon -->
-    <a href="{{ routes.root_url }}" class="glass-nav-item" aria-label="Ana Sayfa">
-      <div class="glass-nav-item-inner">
-        <svg class="glass-nav-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M21.205 7.765a2.93 2.93 0 0 0-1.16-1.28l-6.47-4a3 3 0 0 0-3.16 0l-6.47 4a3 3 0 0 0-1.12 1.29a2.92 2.92 0 0 0-.24 1.7l1.68 10a2.94 2.94 0 0 0 1 1.79a3 3 0 0 0 1.9.7h9.62a3 3 0 0 0 1.94-.7a2.9 2.9 0 0 0 1-1.79l1.68-10a3 3 0 0 0-.2-1.71m-5.86 9.7h-6.69a1 1 0 0 1 0-2h6.69a1 1 0 1 1 0 2"></path>
-        </svg>
-      </div>
-    </a>
-
     <!-- Cart Icon with Liquid Progress -->
     {%- assign threshold = section.settings.free_shipping_threshold | times: 100.0 -%}
     {%- assign cart_total = cart.total_price | times: 1.0 -%}
@@ -770,6 +761,15 @@
         </svg>
       </div>
     </a>
+    
+    <!-- Home Icon -->
+    <a href="{{ routes.root_url }}" class="glass-nav-item" aria-label="Ana Sayfa">
+      <div class="glass-nav-item-inner">
+        <svg class="glass-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M21.205 7.765a2.93 2.93 0 0 0-1.16-1.28l-6.47-4a3 3 0 0 0-3.16 0l-6.47 4a3 3 0 0 0-1.12 1.29a2.92 2.92 0 0 0-.24 1.7l1.68 10a2.94 2.94 0 0 0 1 1.79a3 3 0 0 0 1.9.7h9.62a3 3 0 0 0 1.94-.7a2.9 2.9 0 0 0 1-1.79l1.68-10a3 3 0 0 0-.2-1.71m-5.86 9.7h-6.69a1 1 0 0 1 0-2h6.69a1 1 0 1 1 0 2"></path>
+        </svg>
+      </div>
+    </a>
 
     <!-- WhatsApp Icon -->
     {% assign whatsapp_url = 'https://wa.me/' | append: section.settings.whatsapp_number %}
@@ -781,15 +781,6 @@
       <div class="glass-nav-item-inner">
         <svg class="glass-nav-icon" viewBox="0 0 432 432" fill="currentColor">
            <path d="M364.5 65Q427 127 427 214.5T364.5 364T214 426q-54 0-101-26L0 429l30-109Q2 271 2 214q0-87 62-149T214 3t150.5 62zM214 390q73 0 125-51.5T391 214T339 89.5T214 38T89.5 89.5T38 214q0 51 27 94l4 6l-18 65l67-17l6 3q42 25 90 25zm97-132q9 5 10 7q4 6-3 25q-3 8-15 15.5t-21 9.5q-18 2-33-2q-17-6-30-11q-8-4-15.5-8.5t-14.5-9t-13-9.5t-11.5-10t-10.5-10.5t-8.5-9.5t-7-8.5t-5.5-7t-3.5-5L128 222q-22-29-22-55q0-24 19-44q6-7 14-7q6 0 10 1q8 0 12 9q2 3 6 13l7 17.5l3 8.5q3 5 1 9q-3 7-5 9l-3 3l-3 3.5l-2 2.5q-6 6-3 11q13 22 30 37q13 11 43 26q7 3 11-1q12-15 17-21q4-6 12-3q6 3 36 17z"></path>
-        </svg>
-      </div>
-    </a>
-
-    <!-- Account Icon -->
-    <a href="{{ routes.account_url }}" class="glass-nav-item" aria-label="Hesabım">
-      <div class="glass-nav-item-inner">
-        <svg class="glass-nav-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M11.967 1.752c-2.15.01-4.244.695-5.984 1.957a10.234 10.234 0 0 0-.126 16.493c.05.049.107.09.17.12a10.228 10.228 0 0 0 11.95 0a.831.831 0 0 0 .18-.13a10.235 10.235 0 0 0-.172-16.506a10.278 10.278 0 0 0-5.998-1.934zm0 3.76a4.162 4.162 0 0 1 3.878 2.534a4.144 4.144 0 0 1-.882 4.543A4.158 4.158 0 0 1 7.86 9.632a4.147 4.147 0 0 1 1.21-2.898a4.16 4.16 0 0 1 2.897-1.222m4.627 13.92a8.754 8.754 0 0 1-9.245 0a8.094 8.094 0 0 1-1.212-.9a7.126 7.126 0 0 1 2.144-2a7.23 7.23 0 0 1 7.382 0a7.125 7.125 0 0 1 2.143 2c-.375.337-.78.638-1.212.9"></path>
         </svg>
       </div>
     </a>
