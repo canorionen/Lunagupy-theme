@@ -52,6 +52,9 @@
     width: calc(100% - 30px);
     max-width: 1400px;
     
+    /* Ensure proper height */
+    min-height: 50px;
+    
     /* Liquid Glass Effect */
     background-color: rgba(255, 255, 255, 0.65) !important;
     backdrop-filter: blur(18px) saturate(160%);
@@ -71,6 +74,30 @@
     
     /* Smooth transitions */
     transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    
+    /* Ensure padding for content */
+    padding: 12px 20px !important;
+  }
+  
+  /* Override text color for visibility - MORE SPECIFIC SELECTORS */
+  .announcement-bar,
+  .announcement-bar *,
+  .announcement-bar__text,
+  .announcement-bar__slide,
+  .announcement-bar p,
+  .announcement-bar a,
+  .announcement-bar span,
+  .announcement-bar div,
+  aside.announcement-bar *,
+  .announcement-bar-component * {
+    color: #333 !important;
+  }
+  
+  /* Override links specifically */
+  .announcement-bar a,
+  .announcement-bar__link {
+    color: #333 !important;
+    text-decoration: none !important;
   }
   
   /* Mobile adjustments */
@@ -79,6 +106,8 @@
       top: 10px;
       width: calc(100% - 20px);
       border-radius: 16px;
+      min-height: 45px;
+      padding: 10px 16px !important;
     }
   }
 
@@ -87,6 +116,7 @@
     flex-direction: row;
     align-items: center;
     position: relative;
+    min-height: inherit;
 
     @media screen and (max-width: 749px) {
       grid-column: 1 / -1;
@@ -120,7 +150,7 @@
   }
 
   .announcement-bar__slider slideshow-arrows .slideshow-control {
-    color: var(--color-foreground);
+    color: #333 !important;
   }
 
   .announcement-bar__slider .slideshow-control {
