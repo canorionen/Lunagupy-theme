@@ -459,8 +459,35 @@
   .glass-search-btn:hover {
     background: rgba(255, 255, 255, 0.5);
   }
+  
+  /* Extra space for search icon */
+  #glassSearchButton .glass-nav-icon {
+    padding: 3px;
+  }
 
-  .glass-menu-window.open {
+  /* Responsive Adjustments - Compact Loop */
+  @media screen and (max-width: 480px) {
+    .glass-nav-wrapper {
+      max-width: 98vw;
+    }
+    .glass-nav-container {
+      padding: 10px 12px;
+      gap: 6px; /* Tighter gap to fit 6 items */
+      justify-content: space-between;
+      width: 100%;
+    }
+    .glass-nav-icon {
+      width: 22px;
+      height: 22px;
+    }
+    .glass-nav-item {
+      width: 38px;
+      height: 38px;
+    }
+    .cart-progress-bg {
+      inset: -3px;
+    }
+  }
     opacity: 1;
     pointer-events: auto;
     /* Rise up above the nav bar (approx 80-90px up) */
@@ -504,24 +531,8 @@
     transform: rotate(90deg);
   }
   
-  /* Responsive Adjustments */
-  @media screen and (max-width: 480px) {
-    .glass-nav-container {
-      padding: 12px 24px;
-      gap: 20px;
-    }
-    .glass-nav-icon {
-      width: 28px;
-      height: 28px;
-    }
-    .glass-nav-item {
-      width: 42px;
-      height: 42px;
-    }
-    .cart-progress-bg {
-      inset: -4px;
-    }
   }
+  /* Previous responsive block removed, consolidated below */
 </style>
 
 <div class="glass-nav-wrapper">
