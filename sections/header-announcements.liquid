@@ -43,43 +43,40 @@
     /* Remove default border */
     border-block-end: none !important;
     
-    /* Make it fixed and float from top */
-    position: fixed;
-    top: 15px;
+    /* Make it absolute so it scrolls away and doesn't overlap header */
+    position: absolute;
+    top: 12px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 99998; /* Just below glass nav */
-    width: calc(100% - 30px);
-    max-width: 1400px;
+    z-index: 99998;
+    width: calc(100% - 32px);
+    max-width: 1200px;
     
-    /* Ensure proper height */
-    min-height: 50px;
+    /* Thinner design */
+    min-height: 34px;
+    padding: 6px 20px !important;
     
-    /* Liquid Glass Effect */
-    background-color: rgba(255, 255, 255, 0.65) !important;
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    /* Brand Design - Orange Liquid Glass */
+    background-color: rgba(230, 157, 115, 0.9) !important; /* Brand Orange: #e69d73 */
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
     
     /* Rounded corners */
-    border-radius: 20px;
+    border-radius: 100px;
     
-    /* Dimensional shadows and borders */
+    /* Dimensional shadows */
     box-shadow: 
-      0 30px 60px -15px rgba(0, 0, 0, 0.12), 
-      inset 0 0 0 1px rgba(255, 255, 255, 0.5), 
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.6);
+      0 10px 25px -5px rgba(230, 157, 115, 0.3), 
+      inset 0 0 0 1px rgba(255, 255, 255, 0.2);
     
     /* Override color scheme */
     --color-background: transparent !important;
     
     /* Smooth transitions */
     transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    
-    /* Ensure padding for content */
-    padding: 12px 20px !important;
   }
   
-  /* Override text color for visibility - MORE SPECIFIC SELECTORS */
+  /* Text styling for Brand Orange background */
   .announcement-bar,
   .announcement-bar *,
   .announcement-bar__text,
@@ -90,14 +87,23 @@
   .announcement-bar div,
   aside.announcement-bar *,
   .announcement-bar-component * {
-    color: #333 !important;
+    color: #ffffff !important;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
   }
   
   /* Override links specifically */
   .announcement-bar a,
   .announcement-bar__link {
-    color: #333 !important;
-    text-decoration: none !important;
+    color: #ffffff !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px;
+    opacity: 0.9;
+  }
+
+  .announcement-bar a:hover {
+    opacity: 1;
   }
   
   /* Mobile adjustments */
@@ -105,9 +111,12 @@
     .announcement-bar {
       top: 10px;
       width: calc(100% - 20px);
-      border-radius: 16px;
-      min-height: 45px;
-      padding: 10px 16px !important;
+      border-radius: 100px;
+      min-height: 32px;
+      padding: 5px 16px !important;
+    }
+    .announcement-bar__text {
+      font-size: 12px;
     }
   }
 
