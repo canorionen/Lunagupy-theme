@@ -43,6 +43,12 @@
       "id": "cart_success_message",
       "label": "Cart Success Message",
       "default": "🛒 Sepete başarıyla eklendi!"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Quick Menu (Rising Window)",
+      "default": "main-menu"
     }
   ],
   "presets": [
@@ -441,10 +447,14 @@
     </div>
   </div>
   <div class="glass-menu-window" id="GlassMenuWindow">
-    <div class="glass-menu-title">HIZLI MENÜ</div>
-    <a href="{{ routes.all_products_collection_url }}" class="glass-menu-link">Tüm Ürünler</a>
-    <a href="/search" class="glass-menu-link">Arama</a>
-    <a href="/pages/contact" class="glass-menu-link">İletişim</a>
+    <div class="glass-menu-title">{{ section.settings.menu.title | default: 'MENÜ' }}</div>
+    {%- if section.settings.menu.links.size > 0 -%}
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}" class="glass-menu-link">{{ link.title }}</a>
+      {%- endfor -%}
+    {%- else -%}
+      <div style="padding: 10px; font-size: 13px; color: #888;">Menü seçilmedi.</div>
+    {%- endif -%}
   </div>
 
   <nav class="glass-nav-container" id="GlassNavContainer">
@@ -521,7 +531,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const navContainer = document.getElementById('GlassNavContainer');
     
-    // 1. Spotlight & Magnetic Effect
+    // 1. Spotlight Effect (Magnetic Removed)
     if (navContainer) {
         navContainer.addEventListener('mousemove', (e) => {
             const rect = navContainer.getBoundingClientRect();
@@ -529,38 +539,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const y = e.clientY - rect.top;
             navContainer.style.setProperty('--mouse-x', `${x}px`);
             navContainer.style.setProperty('--mouse-y', `${y}px`);
-
-            // Magnetic Items
-            const navItems = navContainer.querySelectorAll('.glass-nav-item');
-            navItems.forEach(item => {
-                const itemRect = item.getBoundingClientRect();
-                const itemCenterX = itemRect.left + itemRect.width / 2;
-                const itemCenterY = itemRect.top + itemRect.height / 2;
-                
-                const dist = Math.hypot(e.clientX - itemCenterX, e.clientY - itemCenterY);
-                
-                // Reduced threshold from 60 to 45 to prevent neighbor interference
-                if (dist < 45) {
-                    const moveX = (e.clientX - itemCenterX) * 0.35;
-                    const moveY = (e.clientY - itemCenterY) * 0.35;
-                    item.classList.add('magnetic');
-                    item.style.setProperty('--mx', `${moveX}px`);
-                    item.style.setProperty('--my', `${moveY}px`);
-                } else {
-                    item.classList.remove('magnetic');
-                    item.style.setProperty('--mx', `0px`);
-                    item.style.setProperty('--my', `0px`);
-                }
-            });
-        });
-
-        navContainer.addEventListener('mouseleave', () => {
-             const navItems = navContainer.querySelectorAll('.glass-nav-item');
-             navItems.forEach(item => {
-                item.classList.remove('magnetic');
-                item.style.setProperty('--mx', `0px`);
-                item.style.setProperty('--my', `0px`);
-             });
         });
     }
 
