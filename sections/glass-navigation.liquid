@@ -465,33 +465,7 @@
     padding: 3px;
   }
 
-  /* Responsive Adjustments - Uniform Spacing */
-  @media screen and (max-width: 480px) {
-    .glass-nav-wrapper {
-      max-width: 100vw;
-      width: 100%;
-      bottom: 20px; /* Lower it slightly */
-    }
-    .glass-nav-container {
-      padding: 10px 4px; /* Minimal side padding */
-      gap: 0; /* Let justify-content handle it via space-evenly or manual margins */
-      justify-content: space-evenly; /* Distribute evenly */
-      width: 100%;
-      max-width: 360px; /* Constrain max width to keep icons together */
-      margin: 0 auto;
-    }
-    .glass-nav-icon {
-      width: 24px;
-      height: 24px;
-    }
-    .glass-nav-item {
-      width: 44px; /* Larger hit area */
-      height: 44px;
-    }
-    .cart-progress-bg {
-      inset: -2px;
-    }
-  }
+
   /* WINDOW OPEN STATES */
   .glass-menu-window.open {
     opacity: 1;
@@ -503,12 +477,12 @@
   .glass-search-window.open {
     opacity: 1;
     pointer-events: auto;
-    /* High up for mobile keyboards */
-    transform: translateX(-50%) translateY(-55vh) scale(1);
+    /* Move WAY up to avoid mobile keyboard */
+    transform: translateX(-50%) translateY(-60vh) scale(1);
     z-index: 100;
   }
 
-  /* Responsive Adjustments - Uniform spacing & Fit 6 items */
+  /* Responsive Adjustments - Centered & Tight Gap */
   @media screen and (max-width: 480px) {
     .glass-nav-wrapper {
       width: 100vw;
@@ -517,11 +491,12 @@
       bottom: 25px;
     }
     .glass-nav-container {
-      padding: 8px 5px !important;
-      gap: 0 !important;
-      justify-content: space-evenly !important;
-      width: 96vw !important;
-      max-width: 380px;
+      padding: 8px 12px !important;
+      gap: 12px !important; /* Fixed tight gap for all icons */
+      justify-content: center !important;
+      width: auto !important;
+      min-width: 280px;
+      max-width: 96vw;
       margin: 0 auto;
     }
     .glass-nav-icon {
