@@ -286,7 +286,7 @@
   .header {
     display: block;
     position: fixed !important;
-    top: 65px !important; /* Push down to clear announcement bar */
+    top: 56px !important; /* Reduced gap - Tight fit with Announcement Bar */
     left: 20px !important;
     right: 20px !important;
     margin: 0 !important;
@@ -304,7 +304,7 @@
   /* Handle mobile spacing */
   @media screen and (max-width: 749px) {
     .header {
-      top: 60px !important;
+      top: 54px !important;
       left: 10px !important;
       right: 10px !important;
     }
@@ -312,7 +312,7 @@
 
   /* Transparent setting logic override - keeps it glass but positioned */
   .header[transparent] {
-    top: 65px !important;
+    top: 56px !important;
     /* Ensure no double-up of backgrounds if possible, but keeping glass is safer */
     background-color: rgba(255, 255, 255, 0.55) !important;
     left: 0;
