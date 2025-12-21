@@ -136,7 +136,7 @@
   .sticky-add-to-cart__bar {
     position: fixed;
     /* Position above glass navigation bar */
-    bottom: 170px; /* Increased to avoid nav bar overlap */
+    bottom: 140px; /* Adjusted to be closer to nav bar */
     left: 50%;
     opacity: 0;
     transform: translateX(-50%) translateY(calc(100% + 40px));
@@ -155,7 +155,7 @@
       0 20px 50px rgba(0, 0, 0, 0.12),
       inset 0 1px 0 rgba(255, 255, 255, 0.8);
     
-    padding: 10px 16px 10px 10px;
+    padding: 12px 20px 12px 12px;
     
     /* Layout styling */
     display: flex;
@@ -262,10 +262,10 @@
   /* Mobile adjustments - Above mobile nav bar */
   @media screen and (max-width: 749px) {
     .sticky-add-to-cart__bar {
-      bottom: 180px; /* Safe distance above nav bar */
+      bottom: 115px; /* Closer to mobile nav bar but not touching */
       width: auto;
       max-width: calc(100% - 24px);
-      padding: 8px 12px 8px 8px;
+      padding: 10px 16px 10px 10px;
       gap: 8px;
       border-radius: 9999px;
     }
@@ -320,9 +320,8 @@
 
   /* Small mobile - compact mode */
   @media screen and (max-width: 480px) {
-    .sticky-add-to-cart__bar {
-      bottom: 180px; /* Increased further to avoid any overlap */
-      padding: 6px 10px 6px 6px;
+      bottom: 115px;
+      padding: 8px 14px 8px 8px;
       gap: 6px;
     }
     
@@ -356,8 +355,8 @@
   /* Very small screens - still show title */
   @media screen and (max-width: 340px) {
     .sticky-add-to-cart__bar {
-      bottom: 180px;
-      padding: 5px 8px 5px 5px;
+      bottom: 115px;
+      padding: 8px 12px 8px 8px;
       gap: 5px;
     }
     
