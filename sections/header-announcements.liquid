@@ -29,12 +29,13 @@
         {% for block in section.blocks %}
            <div class="marquee-item" {{ block.shopify_attributes }}>
               {% case block.type %}
-                {% when '_announcement' %}
-                    {% if block.settings.url != blank %}
-                      <a href="{{ block.settings.url }}" class="marquee-link">
+                {% when 'announcement', '_announcement' %}
+                    {% assign block_link = block.settings.url | default: block.settings.link %}
+                    {% if block_link != blank %}
+                      <a href="{{ block_link }}" class="marquee-link">
                     {% endif %}
                       {{ block.settings.text }}
-                    {% if block.settings.url != blank %}
+                    {% if block_link != blank %}
                       </a>
                     {% endif %}
               {% endcase %}
