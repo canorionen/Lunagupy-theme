@@ -73,6 +73,7 @@
     "variant_swatch_border_style": "solid",
     "variant_button_radius": 16,
     "variant_button_width": "default-width-buttons",
+    "liquid_glass_opacity": 60,
     "liquid_glass_buttons": true,
     "liquid_glass_header": true,
     "sections": {
