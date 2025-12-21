@@ -338,6 +338,79 @@
     100% { transform: scale(2.5); opacity: 0; border-width: 0px; }
   }
 
+  /* MENU WINDOW (Liquid Glass Rise) */
+  .glass-menu-window {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px) scale(0.9);
+    width: 280px;
+    height: auto;
+    /* Glass Effect similar to Nav but slightly different */
+    background-color: rgba(245, 245, 247, 0.65);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    
+    z-index: -2; /* Behind the nav bar */
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    transform-origin: bottom center;
+  }
+
+  .glass-menu-window.open {
+    opacity: 1;
+    pointer-events: auto;
+    /* Rise up above the nav bar (approx 80-90px up) */
+    transform: translateX(-50%) translateY(-95px) scale(1);
+  }
+
+  /* Menu Title */
+  .glass-menu-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #666;
+    margin-bottom: 8px;
+    padding-left: 8px;
+    font-weight: 700;
+  }
+
+  /* Menu Links */
+  .glass-menu-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: #333 !important;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 12px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .glass-menu-link:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.02);
+  }
+
+  /* Hamburger to Close animation styles */
+  .menu-icon-svg {
+    transition: transform 0.3s ease;
+  }
+  .glass-nav-item.menu-active .menu-icon-svg {
+    transform: rotate(90deg);
+  }
+  
   /* Responsive Adjustments */
   @media screen and (max-width: 480px) {
     .glass-nav-container {
@@ -367,8 +440,25 @@
       {{ section.settings.cart_success_message }}
     </div>
   </div>
+  <div class="glass-menu-window" id="GlassMenuWindow">
+    <div class="glass-menu-title">HIZLI MENÜ</div>
+    <a href="{{ routes.all_products_collection_url }}" class="glass-menu-link">Tüm Ürünler</a>
+    <a href="/search" class="glass-menu-link">Arama</a>
+    <a href="/pages/contact" class="glass-menu-link">İletişim</a>
+  </div>
+
   <nav class="glass-nav-container" id="GlassNavContainer">
     <div class="glass-nav-spotlight-layer"></div>
+    
+    <!-- Menu Button (Trigger) -->
+    <div class="glass-nav-item" id="glassMenuButton" role="button" aria-label="Menü">
+      <div class="glass-nav-item-inner">
+         <svg class="glass-nav-icon menu-icon-svg" viewBox="0 0 24 24" fill="currentColor">
+            <!-- Simple Rounded Hamburger -->
+            <path d="M4 6a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm0 6a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm0 6a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1z"></path>
+         </svg>
+      </div>
+    </div>
     
     <!-- Home Icon -->
     <a href="{{ routes.root_url }}" class="glass-nav-item" aria-label="Ana Sayfa">
@@ -599,5 +689,34 @@ document.addEventListener('DOMContentLoaded', () => {
             item.style.setProperty('--my', '0px');
         });
     });
+
+    // 5. Menu Toggle Logic
+    const menuButton = document.getElementById('glassMenuButton');
+    const menuWindow = document.getElementById('GlassMenuWindow');
+    
+    if (menuButton && menuWindow) {
+        menuButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isOpen = menuWindow.classList.contains('open');
+            
+            if (isOpen) {
+                // Close
+                menuWindow.classList.remove('open');
+                menuButton.classList.remove('menu-active');
+            } else {
+                // Open
+                menuWindow.classList.add('open');
+                menuButton.classList.add('menu-active');
+            }
+        });
+
+        // Close menu if clicking outside
+        document.addEventListener('click', (e) => {
+            if (!menuButton.contains(e.target) && !menuWindow.contains(e.target) && menuWindow.classList.contains('open')) {
+                menuWindow.classList.remove('open');
+                menuButton.classList.remove('menu-active');
+            }
+        });
+    }
 });
 </script>
