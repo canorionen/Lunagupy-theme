@@ -491,12 +491,12 @@
       bottom: 25px;
     }
     .glass-nav-container {
-      padding: 8px 12px !important;
-      gap: 12px !important; /* Fixed tight gap for all icons */
+      padding: 8px 10px !important;
+      gap: 10px !important; /* Fixed tight gap for all icons */
       justify-content: center !important;
-      width: auto !important;
-      min-width: 280px;
-      max-width: 96vw;
+      width: max-content !important; /* Hug the icons tightly */
+      min-width: 0 !important;
+      max-width: 98vw;
       margin: 0 auto;
     }
     .glass-nav-icon {
@@ -504,9 +504,11 @@
       height: 22px !important;
     }
     .glass-nav-item {
-      width: 40px !important;
-      height: 40px !important;
+      width: 42px !important;
+      height: 42px !important;
       margin: 0 !important;
+      cursor: pointer !important;
+      pointer-events: auto !important;
     }
     .cart-progress-bg {
       inset: -3px;
@@ -846,6 +848,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(searchInp) {
                     setTimeout(() => searchInp.focus(), 150);
                 }
+            }
+        });
+    }
+
+    const cartBtn = document.getElementById('cartNavIcon');
+    if (cartBtn) {
+        cartBtn.addEventListener('click', function(e) {
+            const drawer = document.querySelector('cart-drawer-component');
+            if (drawer) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeAll();
+                drawer.open();
             }
         });
     }
