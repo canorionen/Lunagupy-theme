@@ -36,6 +36,12 @@
       "id": "show_on_desktop",
       "label": "Show on Desktop",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "cart_success_message",
+      "label": "Cart Success Message",
+      "default": "🛒 Sepete başarıyla eklendi!"
     }
   ],
   "presets": [
@@ -285,6 +291,9 @@
   <div id="GlassNotification" class="glass-nav-notification">
     ✨ Ücretsiz kargoya hak kazandın!
   </div>
+  <div id="CartSuccessNotification" class="glass-nav-notification">
+    {{ section.settings.cart_success_message }}
+  </div>
   <nav class="glass-nav-container" id="GlassNavContainer">
     <div class="glass-nav-spotlight-layer"></div>
     
@@ -406,11 +415,26 @@ document.addEventListener('DOMContentLoaded', () => {
        .catch(err => console.error('GlassNav Cart Error:', err));
     }
 
+    // 3. Show Cart Success Notification
+    function showCartSuccessNotification() {
+        const successNotification = document.getElementById('CartSuccessNotification');
+        if (successNotification) {
+            successNotification.classList.add('show');
+            setTimeout(() => {
+                successNotification.classList.remove('show');
+            }, 3000);
+        }
+    }
+
     // Intercept standard Fetch API requests to detect cart changes
     const originalFetch = window.fetch;
     window.fetch = function() {
         return originalFetch.apply(this, arguments).then((response) => {
             // Check if the URL involves cart operations
+            if (response.url && response.url.includes('/cart/add')) {
+                showCartSuccessNotification();
+            }
+            
             if (response.url && (
                 response.url.includes('/cart/add') || 
                 response.url.includes('/cart/update') || 
@@ -428,6 +452,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const originalOpen = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function() {
         this.addEventListener('load', function() {
+            if (this.responseURL && this.responseURL.includes('/cart/add')) {
+                showCartSuccessNotification();
+            }
+
             if (this.responseURL && (
                 this.responseURL.includes('/cart/add') || 
                 this.responseURL.includes('/cart/update') || 
