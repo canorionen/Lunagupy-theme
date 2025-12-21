@@ -50,40 +50,40 @@
     /* Remove default border */
     border-block-end: none !important;
     
-    /* Sticky Positioning */
-    position: fixed;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100001; /* Above header */
-    width: calc(100% - 32px);
-    max-width: 1200px;
+    /* Force Sticky-like behavior via fixed */
+    position: fixed !important;
+    top: 10px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 100002 !important; /* Extremely high to stay above header */
+    width: calc(100% - 32px) !important;
+    max-width: 1200px !important;
     
     /* Thinner design but enough for readability */
-    min-height: 32px;
-    padding: 4px 20px !important;
+    min-height: 32px !important;
+    padding: 6px 20px !important;
     
     /* Improved Brand Design - Punchier Orange */
-    background-color: rgba(223, 159, 119, 0.95) !important; /* Slightly darker/more saturated orange */
-    backdrop-filter: blur(10px) saturate(180%);
-    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    background-color: rgba(223, 159, 119, 0.95) !important; 
+    backdrop-filter: blur(10px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
     
     /* Rounded corners */
-    border-radius: 100px;
+    border-radius: 100px !important;
     
     /* High contrast shadow */
     box-shadow: 
       0 4px 15px rgba(0, 0, 0, 0.15), 
-      inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+      inset 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
     
     /* Override color scheme */
     --color-background: transparent !important;
     
     /* Smooth transitions */
-    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
   }
   
-  /* Readability Improvement */
+  /* Readability Improvement - BOLD & UPPERCASE */
   .announcement-bar,
   .announcement-bar *,
   .announcement-bar__text,
@@ -93,12 +93,12 @@
   .announcement-bar span,
   .announcement-bar div {
     color: #ffffff !important;
-    font-size: 13px;
-    font-weight: 800 !important; /* Extra bold for small text readable */
-    letter-spacing: 0.05em;
-    text-transform: uppercase; /* Clean uppercase look */
-    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    line-height: normal;
+    font-size: 13px !important;
+    font-weight: 900 !important; /* Max bold for small text */
+    text-transform: uppercase !important; /* Force uppercase */
+    letter-spacing: 0.06em !important;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3) !important;
+    line-height: normal !important;
   }
   
   /* Link clarity */

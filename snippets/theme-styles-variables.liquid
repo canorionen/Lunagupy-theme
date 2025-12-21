@@ -733,16 +733,26 @@
   }
   {% endif %}
   
-  /* Header */
+  /* Header - Liquid Glass should ONLY apply to the inner header pill, not the section wrapper */
   {% if settings.liquid_glass_header %}
-  header-component,
-  .header-section,
-  .header {
+  /* Target only the floating header element inside the section */
+  .header-section .header {
     background-color: var(--liquid-glass-bg) !important;
     backdrop-filter: var(--liquid-glass-backdrop) !important;
     -webkit-backdrop-filter: var(--liquid-glass-backdrop) !important;
-    border-bottom: var(--liquid-glass-border) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    box-shadow: var(--liquid-glass-shadow) !important;
+  }
+  
+  /* Ensure the wrapper section is ALWAYS transparent to fix the edge-to-edge blur issue */
+  .header-section,
+  header.header-section,
+  .shopify-section-group-header-group {
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
   }
   {% endif %}
 </style>
