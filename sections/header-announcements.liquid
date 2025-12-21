@@ -22,20 +22,28 @@
     endif
   %}
 
-  <announcement-bar-component
-    class="announcement-bar__slider"
-    {% if autoplay == true %}
-      autoplay="{{ section.settings.speed }}" aria-live="polite"
-    {% endif %}
-  >
-    {% if show_arrows %}
-      {% render 'slideshow-arrows', icon_style: 'chevron' %}
-    {% endif %}
-
-    <div class="announcement-bar__slides">
-      {% content_for 'blocks' %}
+  <div class="marquee-container">
+    <div class="marquee-track">
+      {% comment %} Repeat blocks generously to ensure seamless infinite scroll {% endcomment %}
+      {% for i in (1..15) %}
+        {% for block in section.blocks %}
+           <div class="marquee-item" {{ block.shopify_attributes }}>
+              {% case block.type %}
+                {% when '_announcement' %}
+                    {% if block.settings.url != blank %}
+                      <a href="{{ block.settings.url }}" class="marquee-link">
+                    {% endif %}
+                      {{ block.settings.text }}
+                    {% if block.settings.url != blank %}
+                      </a>
+                    {% endif %}
+              {% endcase %}
+              <span class="marquee-separator">•</span>
+           </div>
+        {% endfor %}
+      {% endfor %}
     </div>
-  </announcement-bar-component>
+  </div>
 </aside>
 
 {% stylesheet %}
@@ -57,24 +65,57 @@
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
     box-shadow: 0 4px 15px rgba(223, 159, 119, 0.3) !important;
     
-    /* Layout Fix for Slider */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
-  }
-  
-  /* Ensure slider takes full width */
-  .announcement-bar__slider {
-    width: 100%;
-  }
-
-  /* Reset layout for slides to ensure they work */
-  .announcement-bar__slides {
-    width: 100%;
+    /* Layout Fix for Marquee */
     display: flex;
     align-items: center;
-    justify-content: center;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  .marquee-container {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .marquee-track {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    will-change: transform;
+    animation: marquee 40s linear infinite; /* Slow consistent speed */
+  }
+
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .marquee-separator {
+    margin-left: 20px;
+    font-size: 14px;
+    opacity: 0.6;
+  }
+  
+  .marquee-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* Stop animation on hover for readability */
+  .announcement-bar:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } 
   }
 
   
