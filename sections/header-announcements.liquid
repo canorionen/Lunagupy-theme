@@ -147,18 +147,18 @@
   "blocks": [
     {
       "type": "_announcement",
-      "name": "Duyuru",
+      "name": "t:names.announcement",
       "settings": [
         {
           "type": "text",
           "id": "text",
-          "label": "Duyuru Metni",
-          "default": "Ücretsiz Kargo Fırsatı!"
+          "label": "t:settings.text",
+          "default": "Welcome to our store!"
         },
         {
           "type": "url",
           "id": "url",
-          "label": "Bağlantı (Opsiyonel)"
+          "label": "t:settings.link"
         }
       ]
     }
@@ -240,12 +240,20 @@
   "presets": [
     {
       "name": "t:names.announcement_bar",
-      "blocks": {
-        "announcement_1": {
-          "type": "_announcement"
+      "blocks": [
+        {
+          "type": "_announcement",
+          "settings": {
+            "text": "Ücretsiz Kargo Fırsatını Kaçırmayın!"
+          }
+        },
+        {
+          "type": "_announcement",
+          "settings": {
+            "text": "Yeni Gelen Koleksiyonları İnceleyin"
+          }
         }
-      },
-      "block_order": ["announcement_1"]
+      ]
     }
   ]
 }
