@@ -102,8 +102,8 @@
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 32px;
+    justify-content: center; /* Changed from space-between for equal spacing */
+    gap: 24px; /* Equal gap between all icons */
     padding: 16px 40px;
     border-radius: 9999px;
 
@@ -581,10 +581,18 @@
   
   @media screen and (max-width: 749px) {
     .cart-drawer__dialog {
-      height: calc(90vh - 20px) !important;
-      margin: 10px !important;
-      bottom: 10px !important;
-      top: auto !important;
+      /* Center cart drawer on mobile - both horizontally and vertically */
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      right: auto !important;
+      bottom: auto !important;
+      transform: translate(-50%, -50%) !important;
+      width: calc(100vw - 40px) !important;
+      max-width: 400px !important;
+      height: auto !important;
+      max-height: calc(90vh - 40px) !important;
+      margin: 0 !important;
     }
   }
 
