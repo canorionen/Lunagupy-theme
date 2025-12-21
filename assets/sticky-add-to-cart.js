@@ -219,7 +219,7 @@ class StickyAddToCartComponent extends Component {
     if (!this.#targetAddToCartButton) {
       // Fallback: try to find any add to cart button in the same section
       const section = this.closest('.shopify-section');
-      this.#targetAddToCartButton = section?.querySelector('product-form-component button[name="add"]');
+      this.#targetAddToCartButton = section ? /** @type {HTMLButtonElement} */ (section.querySelector('product-form-component button[name="add"]')) : null;
     }
 
     if (!this.#targetAddToCartButton) {
