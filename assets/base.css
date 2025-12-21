@@ -3952,6 +3952,7 @@ text-component {
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
 }
 
 /* Product card title truncation - applied on mobile regardless of view */
@@ -3962,6 +3963,7 @@ text-component {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 }
 
@@ -4021,7 +4023,7 @@ text-component {
 
 /* === LUNAGUPY CUSTOM HEADER & ANNOUNCEMENT BAR FIXES === */
 
-/* Force Announcement Bar to be STICKY, THIN and CENTERED */
+/* Force Announcement Bar to be STICKY, VERY THIN and CENTERED */
 .announcement-bar,
 body .announcement-bar,
 aside.announcement-bar.announcement-bar {
@@ -4029,136 +4031,120 @@ aside.announcement-bar.announcement-bar {
   top: 8px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
-  z-index: 999999 !important;
+  z-index: 1000000 !important;
   /* Highest layer */
-  width: calc(100% - 32px) !important;
+  width: calc(100% - 40px) !important;
   max-width: 1200px !important;
-  min-height: 26px !important;
-  /* Dikeyden daraltıldı */
-  /* === LUNAGUPY CUSTOM HEADER & ANNOUNCEMENT BAR FIXES === */
+  min-height: 22px !important;
+  height: 22px !important;
+  padding: 0 20px !important;
+  background-color: rgba(223, 159, 119, 0.98) !important;
+  backdrop-filter: blur(8px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(180%) !important;
+  border-radius: 100px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
 
-  /* Force Announcement Bar to be STICKY, VERY THIN and CENTERED */
-  .announcement-bar,
-  body .announcement-bar,
-  aside.announcement-bar.announcement-bar {
-    position: fixed !important;
-    top: 8px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    z-index: 1000000 !important;
-    /* Highest layer */
-    width: calc(100% - 40px) !important;
-    max-width: 1200px !important;
-    min-height: 22px !important;
-    height: 22px !important;
-    padding: 0 20px !important;
-    background-color: rgba(223, 159, 119, 0.98) !important;
-    backdrop-filter: blur(8px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(8px) saturate(180%) !important;
-    border-radius: 100px !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.2) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+/* Force centering for the text/slider */
+.announcement-bar__slider {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.announcement-bar__slides {
+  margin: 0 auto !important;
+  max-width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+/* Force text style for thin bar */
+.announcement-bar__text,
+.announcement-bar__slide p,
+.announcement-bar__slide {
+  color: #ffffff !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+  text-align: center !important;
+  line-height: normal !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* OVERLAY LAYOUT: Pages start from the very top */
+#header-group {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999998;
+}
+
+.header-section {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Inner Header Pill - ALWAYS FLOATING and VISIBLE */
+header-component.header {
+  position: fixed !important;
+  top: 38px !important;
+  /* Responsive sitting below announcement bar */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 30px) !important;
+  max-width: 1300px !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  transition: all 0.3s ease !important;
+  z-index: 999997 !important;
+}
+
+/* Ensure content starts at top */
+main#MainContent,
+.shopify-section,
+body {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Remove Shopify default spacing */
+.header--inherit-color-scheme-on-menu-open,
+.header-wrapper {
+  background: transparent !important;
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 749px) {
+  .announcement-bar {
+    top: 6px !important;
+    width: calc(100% - 16px) !important;
+    height: 20px !important;
+    min-height: 20px !important;
   }
 
-  /* Force centering for the text/slider */
-  .announcement-bar__slider {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 100% !important;
+  .announcement-bar__text {
+    font-size: 9px !important;
   }
 
-  .announcement-bar__slides {
-    margin: 0 auto !important;
-    max-width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-  }
-
-  /* Force text style for thin bar */
-  .announcement-bar__text,
-  .announcement-bar__slide p,
-  .announcement-bar__slide {
-    color: #ffffff !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.1em !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
-    text-align: center !important;
-    line-height: normal !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  /* OVERLAY LAYOUT: Pages start from the very top */
-  #header-group {
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 999998;
-  }
-
-  .header-section {
-    background: transparent !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  /* Inner Header Pill - ALWAYS FLOATING and VISIBLE */
   header-component.header {
-    position: fixed !important;
-    top: 38px !important;
-    /* Responsive sitting below announcement bar */
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: calc(100% - 30px) !important;
-    max-width: 1300px !important;
-    background-color: rgba(255, 255, 255, 0.8) !important;
-    backdrop-filter: blur(20px) saturate(160%) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
-    border-radius: 24px !important;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12) !important;
-    border: 1px solid rgba(255, 255, 255, 0.5) !important;
-    transition: all 0.3s ease !important;
-    z-index: 999997 !important;
+    top: 32px !important;
+    width: calc(100% - 16px) !important;
+    border-radius: 18px !important;
   }
-
-  /* Ensure content starts at top */
-  main#MainContent,
-  .shopify-section,
-  body {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
-
-  /* Remove Shopify default spacing */
-  .header--inherit-color-scheme-on-menu-open,
-  .header-wrapper {
-    background: transparent !important;
-  }
-
-  /* Mobile adjustments */
-  @media screen and (max-width: 749px) {
-    .announcement-bar {
-      top: 6px !important;
-      width: calc(100% - 16px) !important;
-      height: 20px !important;
-      min-height: 20px !important;
-    }
-
-    .announcement-bar__text {
-      font-size: 9px !important;
-    }
-
-    header-component.header {
-      top: 32px !important;
-      width: calc(100% - 16px) !important;
-      border-radius: 18px !important;
-    }
-  }
+}
