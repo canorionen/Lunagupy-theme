@@ -105,51 +105,98 @@ class StickyAddToCartComponent extends Component {
     const buyButtonsBlock = productForm.closest('.buy-buttons-block') || productForm.parentElement;
     if (!buyButtonsBlock) return;
 
-    const footer = document.querySelector('footer, .shopify-section-footer, .footer');
-    if (!footer) return;
+    // Store reference for use in scroll handler
+    this._buyButtonsBlock = buyButtonsBlock;
 
-    // Observer for buy buttons visibility
+    // Observer for buy buttons visibility with better detection
     this.#buyButtonsIntersectionObserver = new IntersectionObserver((entries) => {
       const [entry] = entries;
       if (!entry) return;
 
-      // Only show sticky bar if buy buttons have been scrolled past (above viewport)
-      if (!entry.isIntersecting && !this.#isStuck) {
+      // Show sticky bar when buy buttons are NOT visible in viewport
+      if (!entry.isIntersecting) {
         const rect = entry.target.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top < 0) {
-          this.#showStickyBar();
-        }
-      } else if (entry.isIntersecting && this.#isStuck) {
-        this.#hiddenByBottom = false;
-        this.#hideStickyBar();
-      }
-    }, { threshold: 0 });
-
-    // Observer for footer visibility - hides sticky bar at page bottom
-    this.#mainBottomObserver = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        if (!entry) return;
-
-        if (entry.isIntersecting && this.#isStuck) {
-          this.#hiddenByBottom = true;
-          this.#hideStickyBar();
-        } else if (!entry.isIntersecting && this.#hiddenByBottom) {
-          const rect = buyButtonsBlock.getBoundingClientRect();
-          if (rect.bottom < 0 || rect.top < 0) {
-            this.#hiddenByBottom = false;
+        // Element is above viewport (scrolled past)
+        if (rect.bottom < 0) {
+          if (!this.#isStuck && !this.#hiddenByBottom) {
             this.#showStickyBar();
           }
         }
-      },
-      {
-        rootMargin: '100px 0px 0px 0px',
+      } else {
+        // Buy buttons are visible, hide sticky bar
+        if (this.#isStuck) {
+          this.#hiddenByBottom = false;
+          this.#hideStickyBar();
+        }
       }
-    );
+    }, {
+      threshold: 0,
+      rootMargin: '-50px 0px 0px 0px' // Trigger slightly before element leaves viewport
+    });
+
+    // Try to find footer for bottom hiding
+    const footer = document.querySelector('footer, .shopify-section-footer, .footer, [id*="footer"]');
+
+    if (footer) {
+      // Observer for footer visibility - hides sticky bar at page bottom
+      this.#mainBottomObserver = new IntersectionObserver(
+        (entries) => {
+          const [entry] = entries;
+          if (!entry) return;
+
+          if (entry.isIntersecting && this.#isStuck) {
+            this.#hiddenByBottom = true;
+            this.#hideStickyBar();
+          } else if (!entry.isIntersecting && this.#hiddenByBottom) {
+            const rect = buyButtonsBlock.getBoundingClientRect();
+            if (rect.bottom < 0) {
+              this.#hiddenByBottom = false;
+              this.#showStickyBar();
+            }
+          }
+        },
+        {
+          rootMargin: '100px 0px 0px 0px',
+        }
+      );
+      this.#mainBottomObserver.observe(footer);
+    }
 
     this.#buyButtonsIntersectionObserver.observe(buyButtonsBlock);
-    this.#mainBottomObserver.observe(footer);
     this.#updateTargetButton();
+
+    // Fallback: Also add scroll listener for extra reliability
+    this.#setupScrollFallback(buyButtonsBlock);
+  }
+
+  /**
+   * Sets up a scroll-based fallback for sticky bar visibility
+   * @param {Element} buyButtonsBlock - The buy buttons container
+   */
+  #setupScrollFallback(buyButtonsBlock) {
+    let ticking = false;
+    const { signal } = this.#abortController;
+
+    const checkVisibility = () => {
+      const rect = buyButtonsBlock.getBoundingClientRect();
+      const isAboveViewport = rect.bottom < 0;
+
+      if (isAboveViewport && !this.#isStuck && !this.#hiddenByBottom) {
+        this.#showStickyBar();
+      } else if (!isAboveViewport && this.#isStuck) {
+        this.#hiddenByBottom = false;
+        this.#hideStickyBar();
+      }
+
+      ticking = false;
+    };
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(checkVisibility);
+        ticking = true;
+      }
+    }, { signal, passive: true });
   }
 
   /**
