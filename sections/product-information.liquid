@@ -69,52 +69,7 @@
         </div>
       {% endif %}
 
-      {% liquid
-        assign has_single_option = false
-        if product.has_only_default_variant != true and product.options.size == 1
-          assign has_single_option = true
-        endif
 
-        if image_to_show == blank
-          assign has_image = false
-        else
-          assign has_image = true
-        endif
-      %}
-      <div
-        class="sticky-add-to-cart__info"
-        data-has-image="{{ has_image }}"
-        data-singleton="{{ product.has_only_default_variant }}"
-        data-single-option="{{ has_single_option }}"
-      >
-        <h3
-          class="sticky-add-to-cart__title"
-          data-testid="sticky-product-title"
-        >
-          {{ product.title | escape }}
-        </h3>
-        <div
-          class="sticky-add-to-cart__variant"
-          data-testid="sticky-variant-title"
-          {% if product.has_only_default_variant %}
-            style="display: none;"
-          {% endif %}
-        >
-          {% unless product.has_only_default_variant %}
-            {% if current_variant != blank %}
-              {% assign variant_title = current_variant.title | escape %}
-            {% endif %}
-            {{ variant_title }}
-          {% endunless %}
-        </div>
-      </div>
-
-      <div
-        class="sticky-add-to-cart__price"
-        data-testid="sticky-price-display"
-      >
-        {% render 'price', product_resource: product, show_sale_price_first: true %}
-      </div>
 
       <button
         type="button"
@@ -181,7 +136,7 @@
   .sticky-add-to-cart__bar {
     position: fixed;
     /* Position above glass navigation bar */
-    bottom: 100px; /* Nav bar height + offset */
+    bottom: 130px; /* Nav bar height + increased offset */
     left: 50%;
     opacity: 0;
     transform: translateX(-50%) translateY(calc(100% + 40px));
@@ -205,6 +160,7 @@
     /* Layout styling */
     display: flex;
     align-items: center;
+    justify-content: center; /* Center content since we only have image and button */
     gap: var(--gap-md);
 
     @starting-style {
@@ -217,7 +173,7 @@
     .sticky-add-to-cart__bar {
       transition-property: transform, opacity, display;
       transition-duration: 0.4s;
-      transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
       transition-behavior: allow-discrete;
     }
   }
@@ -255,8 +211,7 @@
   }
 
   .sticky-add-to-cart__info {
-    flex: 1;
-    min-width: 0; /* Allow text truncation */
+    display: none;
   }
 
   .sticky-add-to-cart__title {
@@ -276,9 +231,7 @@
   }
 
   .sticky-add-to-cart__price {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: #111;
+    display: none;
   }
 
   .sticky-add-to-cart__button {
@@ -309,7 +262,7 @@
   /* Mobile adjustments - Above mobile nav bar */
   @media screen and (max-width: 749px) {
     .sticky-add-to-cart__bar {
-      bottom: 85px; /* Mobile nav bar height + offset */
+      bottom: 110px; /* Mobile nav bar height + increased offset */
       width: auto;
       max-width: calc(100% - 24px);
       padding: 8px 12px 8px 8px;
