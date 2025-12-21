@@ -4147,19 +4147,59 @@ body {
 /* Mobile adjustments */
 @media screen and (max-width: 749px) {
   .announcement-bar {
-    top: 6px !important;
-    width: calc(100% - 16px) !important;
-    height: 20px !important;
-    min-height: 20px !important;
+    top: 8px !important;
+    width: calc(100% - 20px) !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
   }
 
   .announcement-bar__text {
-    font-size: 9px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.05em !important;
+    font-weight: 700 !important;
   }
 
   header-component.header {
-    top: 32px !important;
-    width: calc(100% - 16px) !important;
-    border-radius: 18px !important;
+    top: 40px !important;
+    /* 8px + 24px + 8px gap */
+    width: calc(100% - 20px) !important;
+    border-radius: 20px !important;
+    min-height: 54px !important;
+    /* Ensure enough touch space */
+    padding: 0 10px !important;
+    /* Give some internal breathing room */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  header-component.header .header__row {
+    width: 100% !important;
+  }
+
+  /* Fix internal header layout on mobile to fit the pill */
+  .header__columns {
+    width: 100% !important;
+    padding: 0 !important;
+    gap: 10px !important;
+  }
+
+  .header__heading-logo {
+    max-height: 32px !important;
+    width: auto !important;
+    object-fit: contain !important;
+  }
+
+  /* Reset margins for safe area */
+  .header__icon,
+  .header__icon--menu {
+    height: 44px !important;
+    width: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 }
