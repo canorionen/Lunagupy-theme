@@ -492,7 +492,7 @@
     z-index: 100;
   }
 
-  /* Responsive Adjustments - Centered & Tight Gap */
+  /* Responsive Adjustments - Equal Spacing */
   @media screen and (max-width: 480px) {
     .glass-nav-wrapper {
       width: 100vw;
@@ -501,12 +501,12 @@
       bottom: 25px;
     }
     .glass-nav-container {
-      padding: 8px 10px !important;
-      gap: 10px !important; /* Fixed tight gap for all icons */
+      padding: 10px 16px !important;
+      gap: 16px !important; /* Equal gap for ALL icons */
       justify-content: center !important;
-      width: max-content !important; /* Hug the icons tightly */
+      width: auto !important;
       min-width: 0 !important;
-      max-width: 98vw;
+      max-width: 95vw;
       margin: 0 auto;
     }
     .glass-nav-icon {
@@ -514,9 +514,11 @@
       height: 22px !important;
     }
     .glass-nav-item {
-      width: 42px !important;
-      height: 42px !important;
+      width: 40px !important;
+      height: 40px !important;
       margin: 0 !important;
+      padding: 0 !important;
+      flex-shrink: 0 !important; /* Prevent shrinking */
       cursor: pointer !important;
       pointer-events: auto !important;
     }

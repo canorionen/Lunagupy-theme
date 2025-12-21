@@ -637,5 +637,104 @@
     --cart-secondary-font-family: var(--font-{{ settings.cart_price_font }}--family);
     --cart-secondary-font-style: var(--font-{{ settings.cart_price_font }}--style);
     --cart-secondary-font-weight: var(--font-{{ settings.cart_price_font }}--weight);
+
+    /* Liquid Glass Variables */
+    --liquid-glass-blur: {{ settings.liquid_glass_blur | default: 20 }}px;
+    --liquid-glass-opacity: {{ settings.liquid_glass_opacity | default: 50 | divided_by: 100.0 }};
+    --liquid-glass-saturation: {{ settings.liquid_glass_saturation | default: 180 }}%;
+    --liquid-glass-bg: rgba(245, 245, 247, var(--liquid-glass-opacity));
+    --liquid-glass-border: 1px solid rgba(255, 255, 255, 0.4);
+    --liquid-glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    --liquid-glass-backdrop: blur(var(--liquid-glass-blur)) saturate(var(--liquid-glass-saturation));
   }
 {% endstyle %}
+
+{%- comment -%} Liquid Glass Global Styles {%- endcomment -%}
+{% if settings.liquid_glass_enabled %}
+<style>
+  /* === LIQUID GLASS GLOBAL STYLES === */
+  
+  /* Drawers (Cart, Menu) */
+  {% if settings.liquid_glass_drawers %}
+  .drawer__dialog,
+  .sidebar__dialog,
+  .cart-drawer__dialog,
+  .menu-drawer__dialog {
+    background-color: var(--liquid-glass-bg) !important;
+    backdrop-filter: var(--liquid-glass-backdrop) !important;
+    -webkit-backdrop-filter: var(--liquid-glass-backdrop) !important;
+    border: var(--liquid-glass-border) !important;
+    box-shadow: var(--liquid-glass-shadow) !important;
+  }
+  
+  .drawer__dialog > *,
+  .sidebar__dialog > *,
+  .cart-drawer__dialog > *,
+  .menu-drawer__dialog > * {
+    background-color: transparent !important;
+  }
+  {% endif %}
+  
+  /* Modals & Popovers */
+  {% if settings.liquid_glass_modals %}
+  .popover,
+  .modal__dialog,
+  .quick-add-modal__dialog,
+  [data-popover],
+  .dropdown__content {
+    background-color: var(--liquid-glass-bg) !important;
+    backdrop-filter: var(--liquid-glass-backdrop) !important;
+    -webkit-backdrop-filter: var(--liquid-glass-backdrop) !important;
+    border: var(--liquid-glass-border) !important;
+    box-shadow: var(--liquid-glass-shadow) !important;
+  }
+  {% endif %}
+  
+  /* Buttons */
+  {% if settings.liquid_glass_buttons %}
+  .button--primary,
+  .shopify-payment-button__button,
+  button[type="submit"].button {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(10px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(150%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .button--primary:hover,
+  button[type="submit"].button:hover {
+    background-color: rgba(0, 0, 0, 0.75) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+    transform: translateY(-1px);
+  }
+  
+  .button--secondary {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+    backdrop-filter: blur(10px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(150%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .button--secondary:hover {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+  {% endif %}
+  
+  /* Header */
+  {% if settings.liquid_glass_header %}
+  header-component,
+  .header-section,
+  .header {
+    background-color: var(--liquid-glass-bg) !important;
+    backdrop-filter: var(--liquid-glass-backdrop) !important;
+    -webkit-backdrop-filter: var(--liquid-glass-backdrop) !important;
+    border-bottom: var(--liquid-glass-border) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  }
+  {% endif %}
+</style>
+{% endif %}

@@ -2284,5 +2284,79 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "Liquid Glass",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "liquid_glass_enabled",
+        "label": "Enable Liquid Glass Effect",
+        "info": "Apply frosted glass effect to drawers, popovers, modals, and buttons",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Glass Settings"
+      },
+      {
+        "type": "range",
+        "id": "liquid_glass_blur",
+        "min": 5,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "label": "Blur Intensity",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "liquid_glass_opacity",
+        "min": 10,
+        "max": 90,
+        "step": 5,
+        "unit": "%",
+        "label": "Background Opacity",
+        "default": 50
+      },
+      {
+        "type": "range",
+        "id": "liquid_glass_saturation",
+        "min": 100,
+        "max": 200,
+        "step": 10,
+        "unit": "%",
+        "label": "Color Saturation",
+        "default": 180
+      },
+      {
+        "type": "header",
+        "content": "Apply To"
+      },
+      {
+        "type": "checkbox",
+        "id": "liquid_glass_drawers",
+        "label": "Drawers (Cart, Menu)",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "liquid_glass_modals",
+        "label": "Modals & Popovers",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "liquid_glass_buttons",
+        "label": "Buttons",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "liquid_glass_header",
+        "label": "Header",
+        "default": false
+      }
+    ]
   }
 ]
