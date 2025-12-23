@@ -138,14 +138,14 @@
     background-color: #0000;
   }
 
-  product-card:is(:hover, :focus-within) .quick-add__button {
+  /* product-card:is(:hover, :focus-within) .quick-add__button {
     opacity: 1;
-  }
+  } */
 
   .quick-add__button {
     display: var(--quick-add-mobile-display, none);
     align-items: center;
-    background: linear-gradient(var(--color-background) 0 100%) padding-box;
+    background: transparent;
     padding: 0;
     border-radius: 50px;
     border: 2px solid hsl(0 0% 0% / 0.15);
@@ -183,7 +183,7 @@
 
     @media screen and (min-width: 750px) {
       display: var(--quick-add-display, flex);
-      opacity: 0;
+      opacity: 1 !important;
     }
   }
 
