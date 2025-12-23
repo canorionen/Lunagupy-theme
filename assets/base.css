@@ -4155,12 +4155,26 @@ header-component.header .header__row--bottom {
   box-shadow: none !important;
 }
 
-/* Ensure content starts at top */
+/* Ensure content starts at top - EXCEPT for pages where header may cover critical content */
 main#MainContent,
 .shopify-section,
 body {
   margin-top: 0 !important;
   padding-top: 0 !important;
+}
+
+/* Fix for header overlap on non-homepage desktop views */
+@media screen and (min-width: 750px) {
+  main#MainContent:not([data-template='index']) {
+    padding-top: 130px !important;
+  }
+}
+
+/* Mobile fix - adjust only if needed */
+@media screen and (max-width: 749px) {
+  main#MainContent:not([data-template='index']) {
+    padding-top: 0px !important;
+  }
 }
 
 /* Remove Shopify default spacing */
