@@ -4165,8 +4165,21 @@ body {
 
 /* Fix for header overlap on non-homepage desktop views */
 @media screen and (min-width: 750px) {
-  main#MainContent:not([data-template='index']) {
-    padding-top: 130px !important;
+
+  /* Product pages - keep similar padding as before */
+  main#MainContent[data-template*='product'] {
+    padding-top: 125px !important;
+  }
+
+  /* Collection pages - move up closer to header */
+  main#MainContent[data-template*='collection'],
+  main#MainContent[data-template*='list-collections'] {
+    padding-top: 105px !important;
+  }
+
+  /* Other sub-pages */
+  main#MainContent:not([data-template='index']):not([data-template*='product']):not([data-template*='collection']) {
+    padding-top: 115px !important;
   }
 }
 
