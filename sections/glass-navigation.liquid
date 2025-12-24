@@ -282,13 +282,13 @@
   /* Sophisticated "Pulse Ring" Animation */
   @keyframes cart-pulse-ring {
     0% {
-      box-shadow: 0 0 0 0 rgba(255, 152, 82, 0.7);
+      box-shadow: 0 0 0 0 rgba(238, 191, 156, 0.7);
     }
     70% {
-      box-shadow: 0 0 0 10px rgba(255, 152, 82, 0);
+      box-shadow: 0 0 0 12px rgba(238, 191, 156, 0);
     }
     100% {
-      box-shadow: 0 0 0 0 rgba(255, 152, 82, 0);
+      box-shadow: 0 0 0 0 rgba(238, 191, 156, 0);
     }
   }
   
@@ -309,7 +309,11 @@
     /* Breathing effect on the ICON */
     animation: cart-icon-breath 2s infinite ease-in-out;
     color: #ffffff; 
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15)); /* Legibility shadow */
+    
+    /* Gaussian Blur "Outer Glow" via drop-shadow which follows the shape */
+    filter: 
+      drop-shadow(0 0 8px rgba(238, 191, 156, 0.8))
+      drop-shadow(0 0 15px rgba(238, 191, 156, 0.5));
   }
 
   /* Loop Animation for Full Cart */
@@ -870,12 +874,12 @@ document.addEventListener('DOMContentLoaded', () => {
              fillElement.style.setProperty('--progress-percent', percent + '%');
              fillElement.style.setProperty('--progress-raw', percent);
 
-             // Color Interpolation: #8a654c to #ff9852
+             // Color Interpolation: #8a654c to #EEBF9C
              // Start RGB: 138, 101, 76
-             // End RGB: 255, 152, 82
-             const r = 138 + (255 - 138) * (percent / 100);
-             const g = 101 + (152 - 101) * (percent / 100);
-             const b = 76 + (82 - 76) * (percent / 100);
+             // End RGB: 238, 191, 156
+             const r = 138 + (238 - 138) * (percent / 100);
+             const g = 101 + (191 - 101) * (percent / 100);
+             const b = 76 + (156 - 76) * (percent / 100);
              const currentColor = `rgb(${r}, ${g}, ${b})`;
              
              fillElement.style.setProperty('--current-fill-color', currentColor);
