@@ -270,37 +270,49 @@
     left: 0;
     width: 100%;
     height: var(--progress-percent, 0%);
-    /* User requested #DAA886 */
-    background-color: #DAA886; 
-    transition: height 0.5s ease-out, filter 0.3s ease;
+    /* Default fallback color (will be overridden by JS) */
+    background-color: var(--current-fill-color, #8a654c); 
+    transition: height 0.5s ease-out, background-color 0.3s ease;
     
-    /* Dynamic Brightness and Glow based on progress */
-    filter: brightness(var(--fill-brightness, 1));
-    box-shadow: 0 0 calc(var(--progress-raw, 0) * 0.25px) rgba(218, 168, 134, 0.8);
+    /* Dynamic Glow based on progress */
+    box-shadow: 0 0 calc(var(--progress-raw, 0) * 0.15px) var(--current-fill-color, #8a654c);
     backdrop-filter: blur(0px);
   }
 
-  /* Loop Animation for Full Cart */
-  @keyframes cart-loop-attention {
-    0% { 
-      transform: scale(1); 
-      filter: drop-shadow(0 0 0px rgba(218, 168, 134, 0));
+  /* Sophisticated "Pulse Ring" Animation */
+  @keyframes cart-pulse-ring {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 152, 82, 0.7);
     }
-    50% { 
-      transform: scale(1.15); 
-      filter: drop-shadow(0 0 10px rgba(218, 168, 134, 1));
+    70% {
+      box-shadow: 0 0 0 10px rgba(255, 152, 82, 0);
     }
-    100% { 
-      transform: scale(1); 
-      filter: drop-shadow(0 0 0px rgba(218, 168, 134, 0));
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 152, 82, 0);
     }
+  }
+  
+  /* Subtle "Breathing" for the icon itself */
+  @keyframes cart-icon-breath {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
   }
 
   /* Apply loop only after the initial celebration is done */
-  .glass-nav-item.celebrated:not(.celebrating) .glass-nav-icon {
-    animation: cart-loop-attention 2s infinite ease-in-out;
-    color: #DAA886; /* Match the fill color */
+  .glass-nav-item.celebrated:not(.celebrating) {
+    /* Pulse ring effect on the CONTAINER */
+    animation: cart-pulse-ring 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
   }
+
+  .glass-nav-item.celebrated:not(.celebrating) .glass-nav-icon {
+    /* Breathing effect on the ICON */
+    animation: cart-icon-breath 2s infinite ease-in-out;
+    color: #ff9852; /* Hardcoded end color for consistency */
+    filter: drop-shadow(0 0 5px rgba(255, 152, 82, 0.6));
+  }
+
+  /* Loop Animation for Full Cart */
+
 
   /* Notifications Stack - Above sticky add-to-cart bar */
   .glass-notifications-stack {
@@ -855,11 +867,17 @@ document.addEventListener('DOMContentLoaded', () => {
           const fillElement = document.querySelector('.cart-progress-fill');
           if (fillElement) {
              fillElement.style.setProperty('--progress-percent', percent + '%');
-             // Set raw value for calc()
              fillElement.style.setProperty('--progress-raw', percent);
-             // Calculate brightness: 1.0 at 0%, 1.5 at 100%
-             const brightness = 1 + (percent / 200); 
-             fillElement.style.setProperty('--fill-brightness', brightness);
+
+             // Color Interpolation: #8a654c to #ff9852
+             // Start RGB: 138, 101, 76
+             // End RGB: 255, 152, 82
+             const r = 138 + (255 - 138) * (percent / 100);
+             const g = 101 + (152 - 101) * (percent / 100);
+             const b = 76 + (82 - 76) * (percent / 100);
+             const currentColor = `rgb(${r}, ${g}, ${b})`;
+             
+             fillElement.style.setProperty('--current-fill-color', currentColor);
           }
           
           // Trigger celebration if 100% reached
@@ -965,7 +983,13 @@ document.addEventListener('DOMContentLoaded', () => {
             item.style.setProperty('--mx', '0px');
             item.style.setProperty('--my', '0px');
         });
+        
+        // Ensure state is restored (fix for back button color loss)
+        updateGlassCartProgress();
     });
+
+    // Run immediately on load as well
+    updateGlassCartProgress();
 
     // 5. Menu & Search Toggle Logic (Optimized)
     const menuBtn = document.getElementById('glassMenuButton');
