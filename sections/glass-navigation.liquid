@@ -304,11 +304,12 @@
     animation: cart-pulse-ring 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
   }
 
+  /* CRITICAL FIX: Icon becomes WHITE to contrast with the Orange Background */
   .glass-nav-item.celebrated:not(.celebrating) .glass-nav-icon {
     /* Breathing effect on the ICON */
     animation: cart-icon-breath 2s infinite ease-in-out;
-    color: #ff9852; /* Hardcoded end color for consistency */
-    filter: drop-shadow(0 0 5px rgba(255, 152, 82, 0.6));
+    color: #ffffff; 
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15)); /* Legibility shadow */
   }
 
   /* Loop Animation for Full Cart */
@@ -372,7 +373,7 @@
   
   .glass-nav-item.celebrating .glass-nav-icon {
     animation: celebration-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    color: #e67e22; /* Celebrate color */
+    color: #ffffff; /* Contrast against orange bg */
   }
   
   .glass-nav-item.celebrating::after {
