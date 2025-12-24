@@ -270,13 +270,36 @@
     left: 0;
     width: 100%;
     height: var(--progress-percent, 0%);
-    /* Stronger, more visible color */
-    background-color: rgba(223, 159, 119, 0.9); 
-    transition: height 0.5s ease-out;
+    /* User requested #DAA886 */
+    background-color: #DAA886; 
+    transition: height 0.5s ease-out, filter 0.3s ease;
     
-    /* Liquid glass effect on the fill */
-    box-shadow: 0 0 15px rgba(223, 159, 119, 0.6); 
-    backdrop-filter: blur(0px); /* Remove blur to make it clearer */
+    /* Dynamic Brightness and Glow based on progress */
+    filter: brightness(var(--fill-brightness, 1));
+    box-shadow: 0 0 calc(var(--progress-raw, 0) * 0.25px) rgba(218, 168, 134, 0.8);
+    backdrop-filter: blur(0px);
+  }
+
+  /* Loop Animation for Full Cart */
+  @keyframes cart-loop-attention {
+    0% { 
+      transform: scale(1); 
+      filter: drop-shadow(0 0 0px rgba(218, 168, 134, 0));
+    }
+    50% { 
+      transform: scale(1.15); 
+      filter: drop-shadow(0 0 10px rgba(218, 168, 134, 1));
+    }
+    100% { 
+      transform: scale(1); 
+      filter: drop-shadow(0 0 0px rgba(218, 168, 134, 0));
+    }
+  }
+
+  /* Apply loop only after the initial celebration is done */
+  .glass-nav-item.celebrated:not(.celebrating) .glass-nav-icon {
+    animation: cart-loop-attention 2s infinite ease-in-out;
+    color: #DAA886; /* Match the fill color */
   }
 
   /* Notifications Stack - Above sticky add-to-cart bar */
@@ -832,6 +855,11 @@ document.addEventListener('DOMContentLoaded', () => {
           const fillElement = document.querySelector('.cart-progress-fill');
           if (fillElement) {
              fillElement.style.setProperty('--progress-percent', percent + '%');
+             // Set raw value for calc()
+             fillElement.style.setProperty('--progress-raw', percent);
+             // Calculate brightness: 1.0 at 0%, 1.5 at 100%
+             const brightness = 1 + (percent / 200); 
+             fillElement.style.setProperty('--fill-brightness', brightness);
           }
           
           // Trigger celebration if 100% reached
