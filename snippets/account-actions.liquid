@@ -155,7 +155,7 @@
 
   /* Makes the shop login button radius match the theme settings */
   .account-actions__shop-login {
-    --buttons-radius: var(--style-border-radius-buttons-primary);
+    --buttons-radius: 9999px;
   }
 
   .account-actions__nav {
@@ -210,14 +210,14 @@
         position: absolute;
         inset: calc(-1 * var(--focus-outline-offset));
         border: var(--focus-outline-width) solid currentColor;
-        border-radius: var(--style-border-radius-buttons-secondary);
+        border-radius: 9999px;
         display: inherit;
       }
     }
 
     .account-actions a.button:focus-visible::after {
       border-color: var(--button-background-color);
-      border-radius: var(--style-border-radius-buttons-primary);
+      border-radius: 9999px;
     }
   }
 {% endstylesheet %}
