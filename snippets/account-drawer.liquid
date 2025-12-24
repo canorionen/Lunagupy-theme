@@ -48,12 +48,34 @@
     --dialog-drawer-opening-animation: account-drawer-slide-in;
     --dialog-drawer-closing-animation: account-drawer-slide-out;
 
+    /* LIQUID GLASS TRANSFORMATION */
     height: fit-content;
     margin: 0;
-    inset-block-end: 0;
+    
+    /* Float from bottom */
+    position: fixed !important;
+    bottom: 20px !important; 
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100vw - 30px) !important;
+    max-width: 400px !important;
+    
+    inset-block-end: auto !important; /* Override default inset */
     inset-block-start: auto;
-    border-radius: 0;
+
+    /* Glass Effect */
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(25px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12) !important;
+    border-radius: 24px !important;
     padding: 0;
+    
+    /* Ensure transparency propagates */
+    &::backdrop {
+      background-color: rgba(0, 0, 0, 0.2); /* Dim background slightly */
+    }
   }
 
   .account-drawer__close-button {
@@ -71,24 +93,33 @@
     align-items: center;
     justify-content: center;
   }
+  
+  /* Force inner content to be transparent so glass shows through */
+  .account-drawer .account-actions {
+    background-color: transparent !important;
+  }
 
   @keyframes account-drawer-slide-in {
     from {
-      transform: translateY(100%);
+      transform: translate(-50%, 120%);
+      opacity: 0;
     }
 
     to {
-      transform: translateY(0);
+      transform: translate(-50%, 0);
+      opacity: 1;
     }
   }
 
   @keyframes account-drawer-slide-out {
     from {
-      transform: translateY(0);
+      transform: translate(-50%, 0);
+      opacity: 1;
     }
 
     to {
-      transform: translateY(100%);
+      transform: translate(-50%, 120%);
+      opacity: 0;
     }
   }
 {% endstylesheet %}
