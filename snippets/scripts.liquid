@@ -49,61 +49,11 @@
   href="{{ 'component.js' | asset_url }}"
   fetchpriority="low"
 >
-<link
-  rel="modulepreload"
-  href="{{ 'section-renderer.js' | asset_url }}"
-  fetchpriority="low"
->
-<link
-  rel="modulepreload"
-  href="{{ 'section-hydration.js' | asset_url }}"
-  fetchpriority="low"
->
-<link
-  rel="modulepreload"
-  href="{{ 'morph.js' | asset_url }}"
-  fetchpriority="low"
->
 
-{% if template.name == 'collection' or template.name == 'search' %}
-  <link
-    rel="modulepreload"
-    href="{{ 'paginated-list-aspect-ratio.js' | asset_url }}"
-    fetchpriority="low"
-  >
-  <link
-    rel="modulepreload"
-    href="{{ 'paginated-list.js' | asset_url }}"
-    fetchpriority="low"
-  >
 
-  <link
-    rel="modulepreload"
-    href="{{ 'product-title-truncation.js' | asset_url }}"
-    fetchpriority="low"
-  >
-{% endif %}
 
-<link
-  rel="modulepreload"
-  href="{{ 'focus.js' | asset_url }}"
-  fetchpriority="low"
->
-<link
-  rel="modulepreload"
-  href="{{ 'recently-viewed-products.js' | asset_url }}"
-  fetchpriority="low"
->
-<link
-  rel="modulepreload"
-  href="{{ 'scrolling.js' | asset_url }}"
-  fetchpriority="low"
->
-<link
-  rel="modulepreload"
-  href="{{ 'events.js' | asset_url }}"
-  fetchpriority="low"
->
+
+
 <script
   src="{{ 'popover-polyfill.js' | asset_url }}"
   type="module"
