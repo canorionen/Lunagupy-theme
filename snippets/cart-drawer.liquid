@@ -170,12 +170,19 @@
     height: calc(100% - var(--header-height));
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+  }
+
+  .cart-drawer__items {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .cart-drawer__summary {
     background-color: var(--color-background);
-    position: sticky;
-    bottom: 0;
     z-index: 1;
+    border-top: 0.1rem solid rgba(var(--color-foreground), 0.2);
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
   }
 {% endstylesheet %}
